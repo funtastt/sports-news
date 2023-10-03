@@ -1,4 +1,4 @@
-package ru.kpfu.itis.asadullin.controller.server;
+package ru.kpfu.itis.asadullin.controller.servlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
