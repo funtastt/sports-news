@@ -1,4 +1,4 @@
-package ru.kpfu.itis.asadullin.model;
+package ru.kpfu.itis.asadullin.model.dto;
 
 import java.util.Date;
 

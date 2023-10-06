@@ -1,9 +1,9 @@
 package ru.kpfu.itis.asadullin.controller.servlet;
 
-import ru.kpfu.itis.asadullin.model.User;
+import ru.kpfu.itis.asadullin.model.entity.User;
 import ru.kpfu.itis.asadullin.service.dao.Dao;
-import ru.kpfu.itis.asadullin.service.dao.PasswordUtil;
 import ru.kpfu.itis.asadullin.service.dao.impl.UserDaoImpl;
+import ru.kpfu.itis.asadullin.service.util.PasswordUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

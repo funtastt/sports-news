@@ -1,4 +1,4 @@
-package ru.kpfu.itis.asadullin.model;
+package ru.kpfu.itis.asadullin.model.entity;
 
 import java.sql.Date;
 

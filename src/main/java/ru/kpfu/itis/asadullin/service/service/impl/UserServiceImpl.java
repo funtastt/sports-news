@@ -1,16 +1,17 @@
-package ru.kpfu.itis.asadullin.service.dao.impl;
+package ru.kpfu.itis.asadullin.service.service.impl;
 
-import ru.kpfu.itis.asadullin.model.User;
-import ru.kpfu.itis.asadullin.model.UserDto;
+import ru.kpfu.itis.asadullin.model.entity.User;
+import ru.kpfu.itis.asadullin.model.dto.UserDto;
+import ru.kpfu.itis.asadullin.service.service.Service;
+import ru.kpfu.itis.asadullin.service.util.PasswordUtil;
 import ru.kpfu.itis.asadullin.service.dao.Dao;
-import ru.kpfu.itis.asadullin.service.dao.PasswordUtil;
-import ru.kpfu.itis.asadullin.service.dao.UserService;
+import ru.kpfu.itis.asadullin.service.dao.impl.UserDaoImpl;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UserServiceImpl implements UserService {
-    private Dao<User> dao = new UserDaoImpl();
+public class UserServiceImpl implements Service<User, UserDto> {
+    private final Dao<User> dao = new UserDaoImpl();
     @Override
     public List<UserDto> getAll() {
         return dao.getAll().stream().map(
@@ -19,8 +20,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto get(int id) {
-        User user = dao.get(id);
+    public UserDto get(User user) {
         return new UserDto(user.getFirstName(), user.getLastName());
     }
 

@@ -1,27 +1,49 @@
 package ru.kpfu.itis.asadullin.service.dao.impl;
 
 import ru.kpfu.itis.asadullin.service.dao.Dao;
-import ru.kpfu.itis.asadullin.model.User;
+import ru.kpfu.itis.asadullin.model.entity.User;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.kpfu.itis.asadullin.controller.database.DatabaseConnectionUtil.getConnection;
+import static ru.kpfu.itis.asadullin.controller.database.DatabaseConnection.getConnection;
 
 public class UserDaoImpl implements Dao<User> {
     private final Connection connection = getConnection();
     @Override
-    public User get(int id) {
-        List<User> users = getAll();
-
-        for (User user : users) {
-            if (user.getUserId() == id) {
-                return user;
+    public User getById(int id) {
+        String sql = "SELECT * FROM users WHERE user_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSetToUser(resultSet);
+            } else {
+                return null;
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+    }
 
-        return null;
+    private User resultSetToUser(ResultSet resultSet) throws SQLException {
+        int userId = resultSet.getInt("user_id");
+        String username = resultSet.getString("username");
+        String email = resultSet.getString("email");
+        String password = resultSet.getString("password");
+        String firstName = resultSet.getString("first_name");
+        String lastName = resultSet.getString("last_name");
+        Date dateOfBirth = resultSet.getDate("date_of_birth");
+        String country = resultSet.getString("country");
+        String city = resultSet.getString("city");
+        Date registrationDate = resultSet.getDate("registration_date");
+        String profilePicture = resultSet.getString("profile_picture");
+        String bio = resultSet.getString("bio");
+        boolean isVerified = resultSet.getBoolean("is_verified");
+        boolean isMale = resultSet.getBoolean("is_male");
+
+        return new User(userId, username, email, password, firstName, lastName, dateOfBirth, country, city, registrationDate, profilePicture, bio, isVerified, isMale);
     }
 
     @Override
@@ -34,22 +56,7 @@ public class UserDaoImpl implements Dao<User> {
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
-                int userId = resultSet.getInt("user_id");
-                String username = resultSet.getString("username");
-                String email = resultSet.getString("email");
-                String password = resultSet.getString("password");
-                String firstName = resultSet.getString("first_name");
-                String lastName = resultSet.getString("last_name");
-                Date dateOfBirth = resultSet.getDate("date_of_birth");
-                String country = resultSet.getString("country");
-                String city = resultSet.getString("city");
-                Date registrationDate = resultSet.getDate("registration_date");
-                String profilePicture = resultSet.getString("profile_picture");
-                String bio = resultSet.getString("bio");
-                boolean isVerified = resultSet.getBoolean("is_verified");
-                boolean isMale = resultSet.getBoolean("is_male");
-
-                User user = new User(userId, username, email, password, firstName, lastName, dateOfBirth, country, city, registrationDate, profilePicture, bio, isVerified, isMale);
+                User user = resultSetToUser(resultSet);
 
                 users.add(user);
             }
@@ -101,7 +108,6 @@ public class UserDaoImpl implements Dao<User> {
                     "bio = ?, " +
                     "is_verified = ?, " +
                     "is_male = ?, " +
-                    "user_id = ? " +
                     "WHERE user_id = ?;";
             saveUserData(user, sql);
         } catch (SQLException e) {
@@ -126,7 +132,6 @@ public class UserDaoImpl implements Dao<User> {
             statement.setBoolean(13, user.isMale());
             if (user.getUserId() != 0) {
                 statement.setInt(14, user.getUserId());
-                statement.setInt(15, user.getUserId());
             }
 
             statement.executeUpdate();

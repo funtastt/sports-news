@@ -1,8 +1,7 @@
 package ru.kpfu.itis.asadullin.controller.servlet;
 
-import ru.kpfu.itis.asadullin.model.User;
-import ru.kpfu.itis.asadullin.service.dao.UserService;
-import ru.kpfu.itis.asadullin.service.dao.impl.UserServiceImpl;
+import ru.kpfu.itis.asadullin.model.entity.User;
+import ru.kpfu.itis.asadullin.service.service.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -58,7 +57,7 @@ public class RegistrationServlet extends HttpServlet {
 
         User user = new User(username, email, password, firstName, lastName, dateOfBirth, country, city, gender.equalsIgnoreCase("male"));
 
-        UserService service = new UserServiceImpl();
+        UserServiceImpl service = new UserServiceImpl();
 
         service.insert(user);
 
