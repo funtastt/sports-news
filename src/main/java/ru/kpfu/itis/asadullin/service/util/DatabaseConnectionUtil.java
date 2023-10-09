@@ -1,10 +1,10 @@
-package ru.kpfu.itis.asadullin.controller.database;
+package ru.kpfu.itis.asadullin.service.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseConnection {
+public class DatabaseConnectionUtil {
     private static Connection connection;
     private static final String URL = "jdbc:postgresql://localhost:5432/sports";
     private static final String USER = "postgres";

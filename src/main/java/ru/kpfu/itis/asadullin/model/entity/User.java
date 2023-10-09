@@ -15,10 +15,13 @@ public class User {
     private Date registrationDate;
     private String profilePicture;
     private String bio;
-    private boolean isVerified;
     private boolean isMale;
 
-    public User(int userId, String username, String email, String password, String firstName, String lastName, Date dateOfBirth, String country, String city, Date registrationDate, String profilePicture, String bio, boolean isVerified, boolean isMale) {
+    public User(int userId) {
+        this.userId = userId;
+    }
+
+    public User(int userId, String username, String email, String password, String firstName, String lastName, Date dateOfBirth, String country, String city, Date registrationDate, String profilePicture, String bio, boolean isMale) {
         this.userId = userId;
         this.username = username;
         this.email = email;
@@ -31,11 +34,10 @@ public class User {
         this.registrationDate = registrationDate;
         this.profilePicture = profilePicture;
         this.bio = bio;
-        this.isVerified = isVerified;
         this.isMale = isMale;
     }
 
-    public User(int userId, String username, String email, String password, String firstName, String lastName, Date dateOfBirth, String country, String city, String profilePicture, String bio, boolean isVerified, boolean isMale) {
+    public User(int userId, String username, String email, String password, String firstName, String lastName, Date dateOfBirth, String country, String city, String profilePicture, String bio, boolean isMale) {
         this.userId = userId;
         this.username = username;
         this.email = email;
@@ -47,7 +49,6 @@ public class User {
         this.city = city;
         this.profilePicture = profilePicture;
         this.bio = bio;
-        this.isVerified = isVerified;
         this.isMale = isMale;
     }
 
@@ -154,14 +155,6 @@ public class User {
 
     public void setBio(String bio) {
         this.bio = bio;
-    }
-
-    public boolean isVerified() {
-        return isVerified;
-    }
-
-    public void setVerified(boolean verified) {
-        isVerified = verified;
     }
 
     public boolean isMale() {

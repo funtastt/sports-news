@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserServiceImpl implements Service<User, UserDto> {
-    private final Dao<User> dao = new UserDaoImpl();
+    private final UserDaoImpl dao = new UserDaoImpl();
     @Override
     public List<UserDto> getAll() {
         return dao.getAll().stream().map(
@@ -32,8 +32,16 @@ public class UserServiceImpl implements Service<User, UserDto> {
 
     @Override
     public void update(User user) {
-        user.setPassword(PasswordUtil.encrypt(user.getPassword()));
-        dao.update(user);
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            user.setPassword(PasswordUtil.encrypt(user.getPassword()));
+            dao.updatePassword(user);
+        }
+        if (user.getProfilePicture() != null && !user.getProfilePicture().isEmpty()) {
+            dao.updateProfilePicture(user);
+        }
+        if (user.getUsername() != null && !user.getUsername().isEmpty()) {
+            dao.updateMainInfo(user);
+        }
     }
 
     @Override

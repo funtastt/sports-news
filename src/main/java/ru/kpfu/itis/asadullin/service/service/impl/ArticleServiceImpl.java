@@ -15,13 +15,13 @@ public class ArticleServiceImpl implements Service<Article, ArticleDto> {
     @Override
     public List<ArticleDto> getAll() {
         return dao.getAll().stream().map(
-                a -> new ArticleDto(a.getTitle(), a.getContent(), a.getAuthor(), a.getPublishTime(), a.getCategory(), a.getSourceUrl(), a.getImageUrl(), a.getViews(), a.getLikes())
+                a -> new ArticleDto(a.getTitle(), a.getContent(), a.getSummary(), a.getAuthor(), a.getPublishTime(), a.getCategory(), a.getSourceUrl(), a.getImageUrl(), a.getViews(), a.getLikes())
         ).collect(Collectors.toList());
     }
 
     @Override
     public ArticleDto get(Article article) {
-        return new ArticleDto(article.getTitle(), article.getContent(), article.getAuthor(), article.getPublishTime(), article.getCategory(), article.getSourceUrl(), article.getImageUrl(), article.getViews(), article.getLikes());
+        return new ArticleDto(article.getTitle(), article.getContent(), article.getSummary(), article.getAuthor(), article.getPublishTime(), article.getCategory(), article.getSourceUrl(), article.getImageUrl(), article.getViews(), article.getLikes());
     }
 
     @Override

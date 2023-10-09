@@ -1,5 +1,7 @@
 package ru.kpfu.itis.asadullin.model.dto;
 
+import ru.kpfu.itis.asadullin.model.entity.User;
+
 import java.util.Date;
 
 public class UserDto {
@@ -12,12 +14,24 @@ public class UserDto {
     private String city;
     private Date registrationDate;
     private String profilePicture;
-    private boolean isVerified;
     private boolean isMale;
 
     public UserDto(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public UserDto(User user) {
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.dateOfBirth = user.getDateOfBirth();
+        this.country = user.getCountry();
+        this.city = user.getCity();
+        this.registrationDate = user.getRegistrationDate();
+        this.profilePicture = user.getProfilePicture();
+        this.isMale = user.isMale();
     }
 
     public String getUsername() {
@@ -90,14 +104,6 @@ public class UserDto {
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
-    }
-
-    public boolean isVerified() {
-        return isVerified;
-    }
-
-    public void setVerified(boolean verified) {
-        isVerified = verified;
     }
 
     public boolean isMale() {

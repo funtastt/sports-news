@@ -12,11 +12,12 @@ import java.io.IOException;
 import java.sql.Date;
 
 // TODO: Выводите на экран push-уведомление, если какие то поля не заполнены
+// TODO: Message: org.postgresql.util.PSQLException: Не указано значение для параметра 13.
 @WebServlet(name = "registrationServlet", urlPatterns = "/registration")
 public class RegistrationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("registration.ftl").forward(req, resp);
+        req.getRequestDispatcher("ftl/registration.ftl").forward(req, resp);
     }
 
     @Override

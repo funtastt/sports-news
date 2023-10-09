@@ -26,7 +26,7 @@ public class LoginServlet extends HttpServlet {
             }
         }
 
-        req.getRequestDispatcher("login.ftl").forward(req, resp);
+        req.getRequestDispatcher("ftl/login.ftl").forward(req, resp);
     }
 
     @Override

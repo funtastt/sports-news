@@ -38,9 +38,9 @@ public class ExceptionHandler extends HttpServlet {
         }
 
         if (code == 404) {
-            req.getRequestDispatcher("404.ftl").forward(req, resp);
+            req.getRequestDispatcher("ftl/404.ftl").forward(req, resp);
         } else {
-            req.getRequestDispatcher("error.ftl").forward(req, resp);
+            req.getRequestDispatcher("ftl/error.ftl").forward(req, resp);
         }
     }
 }

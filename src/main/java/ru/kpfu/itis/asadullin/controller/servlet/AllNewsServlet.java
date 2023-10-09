@@ -15,6 +15,6 @@ public class AllNewsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("all_news", new ArticleDaoImpl().getAll());
 
-        req.getRequestDispatcher("news.ftl").forward(req, resp);
+        req.getRequestDispatcher("ftl/news.ftl").forward(req, resp);
     }
 }

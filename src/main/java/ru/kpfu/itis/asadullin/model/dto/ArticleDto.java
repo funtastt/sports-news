@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 public class ArticleDto {
     private String title;
     private String content;
+    private String summary;
     private String author;
     private Timestamp publishTime;
     private String category;
@@ -14,9 +15,10 @@ public class ArticleDto {
     private int views;
     private int likes;
 
-    public ArticleDto(String title, String content, String author, Timestamp publishTime, String category, String sourceUrl, String imageUrl, int views, int likes) {
+    public ArticleDto(String title, String content, String summary, String author, Timestamp publishTime, String category, String sourceUrl, String imageUrl, int views, int likes) {
         this.title = title;
         this.content = content;
+        this.summary = summary;
         this.author = author;
         this.publishTime = publishTime;
         this.category = category;
@@ -40,6 +42,14 @@ public class ArticleDto {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public String getAuthor() {

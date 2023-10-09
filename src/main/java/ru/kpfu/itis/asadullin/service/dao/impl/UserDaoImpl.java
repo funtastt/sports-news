@@ -7,10 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.kpfu.itis.asadullin.controller.database.DatabaseConnection.getConnection;
+import static ru.kpfu.itis.asadullin.service.util.DatabaseConnectionUtil.getConnection;
 
 public class UserDaoImpl implements Dao<User> {
     private final Connection connection = getConnection();
+
     @Override
     public User getById(int id) {
         String sql = "SELECT * FROM users WHERE user_id = ?";
@@ -21,6 +22,21 @@ public class UserDaoImpl implements Dao<User> {
                 return resultSetToUser(resultSet);
             } else {
                 return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private boolean getIsAdminById(int id) {
+        String sql = "SELECT is_admin FROM users WHERE user_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getBoolean("is_admin");
+            } else {
+                return false;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -40,10 +56,9 @@ public class UserDaoImpl implements Dao<User> {
         Date registrationDate = resultSet.getDate("registration_date");
         String profilePicture = resultSet.getString("profile_picture");
         String bio = resultSet.getString("bio");
-        boolean isVerified = resultSet.getBoolean("is_verified");
         boolean isMale = resultSet.getBoolean("is_male");
 
-        return new User(userId, username, email, password, firstName, lastName, dateOfBirth, country, city, registrationDate, profilePicture, bio, isVerified, isMale);
+        return new User(userId, username, email, password, firstName, lastName, dateOfBirth, country, city, registrationDate, profilePicture, bio, isMale);
     }
 
     @Override
@@ -82,9 +97,8 @@ public class UserDaoImpl implements Dao<User> {
                     "registration_date, " +
                     "profile_picture, " +
                     "bio, " +
-                    "is_verified, " +
                     "is_male" +
-                    ") values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    ") values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             saveUserData(user, sql);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -93,23 +107,64 @@ public class UserDaoImpl implements Dao<User> {
 
     @Override
     public void update(User user) {
-        try {
-            String sql = "UPDATE users " +
-                    "SET username = ?, " +
-                    "email = ?, " +
-                    "password = ?, " +
-                    "first_name = ?, " +
-                    "last_name = ?, " +
-                    "date_of_birth = ?, " +
-                    "country = ?, " +
-                    "city = ?, " +
-                    "registration_date = ?, " +
-                    "profile_picture = ?, " +
-                    "bio = ?, " +
-                    "is_verified = ?, " +
-                    "is_male = ?, " +
-                    "WHERE user_id = ?;";
-            saveUserData(user, sql);
+        updateMainInfo(user);
+        updatePassword(user);
+        updateProfilePicture(user);
+    }
+
+    public void updateMainInfo(User user) {
+        String sql = "UPDATE users " +
+                "SET username = ?, " +
+                "email = ?, " +
+                "first_name = ?, " +
+                "last_name = ?, " +
+                "date_of_birth = ?, " +
+                "country = ?, " +
+                "city = ?, " +
+                "bio = ?, " +
+                "is_male = ? " +
+                "WHERE user_id = ?;";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getEmail());
+            statement.setString(3, user.getFirstName());
+            statement.setString(4, user.getLastName());
+            statement.setDate(5, user.getDateOfBirth());
+            statement.setString(6, user.getCountry());
+            statement.setString(7, user.getCity());
+            statement.setString(8, user.getBio());
+            statement.setBoolean(9, user.isMale());
+            statement.setInt(10, user.getUserId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updatePassword(User user) {
+        String sql = "UPDATE users " +
+                "SET password = ? " +
+                "WHERE user_id = ?;";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getPassword());
+            statement.setInt(2, user.getUserId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateProfilePicture(User user) {
+        String sql = "UPDATE users " +
+                "SET profile_picture = ? " +
+                "WHERE user_id = ?;";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getProfilePicture());
+            statement.setInt(2, user.getUserId());
+
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -128,10 +183,9 @@ public class UserDaoImpl implements Dao<User> {
             statement.setDate(9, user.getRegistrationDate());
             statement.setString(10, user.getProfilePicture());
             statement.setString(11, user.getBio());
-            statement.setBoolean(12, user.isVerified());
-            statement.setBoolean(13, user.isMale());
+            statement.setBoolean(12, user.isMale());
             if (user.getUserId() != 0) {
-                statement.setInt(14, user.getUserId());
+                statement.setInt(13, user.getUserId());
             }
 
             statement.executeUpdate();

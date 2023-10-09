@@ -41,28 +41,17 @@ public class ArticleServlet extends HttpServlet {
         req.setAttribute("article", articleDto);
         req.setAttribute("comments", comments);
 
-        req.getRequestDispatcher("article.ftl").forward(req, resp);
+        req.getRequestDispatcher("ftl/article.ftl").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Part commentPart = req.getPart("commentText");
-
-        // Получите InputStream из Part
-        InputStream commentInputStream = commentPart.getInputStream();
-
-        // Прочитайте данные из InputStream
-        byte[] buffer = new byte[1024];
-        int bytesRead;
-        StringBuilder commentText = new StringBuilder();
-        while ((bytesRead = commentInputStream.read(buffer)) != -1) {
-            commentText.append(new String(buffer, 0, bytesRead));
-        }
+        String commentText = req.getParameter("comment");
 
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
         int userId = findUserIdInCookie(req);
 
-        Comment comment = new Comment(commentText.toString(), currentTime, userId, articleId);
+        Comment comment = new Comment(commentText, currentTime, userId, articleId);
         commentDao.insert(comment);
 
         List<Comment> updatedComments = commentDao.getAllCommentsForArticle(articleId);
@@ -75,7 +64,7 @@ public class ArticleServlet extends HttpServlet {
 
         PrintWriter out = resp.getWriter();
         out.print(jsonResponse);
-        out.flush();
+        out.close();
     }
 
     private int findUserIdInCookie(HttpServletRequest req) {

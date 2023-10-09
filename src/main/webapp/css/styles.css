@@ -1,0 +1,25 @@
+.registration-form,
+.login-form {
+    max-width: 750px;
+
+}
+
+.profile-form {
+    max-width: 1200px;
+}
+
+.registration-form,
+.profile-form,
+.login-form {
+    margin: 0 auto; /* Центрирование формы на странице */
+    padding: 20px; /* Поля вокруг формы */
+    border: 1px solid #ccc; /* Граничная линия формы */
+    border-radius: 10px; /* Округление углов формы */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Тень формы */
+}
+
+.registration-form h3,
+.profile-form h3,
+.login-form h3 {
+    text-align: center; /* Выравнивание заголовка по центру */
+}

@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.kpfu.itis.asadullin.controller.database.DatabaseConnection.getConnection;
+import static ru.kpfu.itis.asadullin.service.util.DatabaseConnectionUtil.getConnection;
 
 public class CommentDaoImpl implements Dao<Comment> {
     private final Connection connection = getConnection();

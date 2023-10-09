@@ -1,6 +1,6 @@
 package ru.kpfu.itis.asadullin.service.dao.impl;
 
-import ru.kpfu.itis.asadullin.controller.database.DatabaseConnection;
+import ru.kpfu.itis.asadullin.service.util.DatabaseConnectionUtil;
 import ru.kpfu.itis.asadullin.model.entity.Article;
 import ru.kpfu.itis.asadullin.service.dao.Dao;
 
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ArticleDaoImpl implements Dao<Article> {
     // TODO: проблемы, если в названии статьи зарезервированные символы, например кавычки (")
-    Connection connection = DatabaseConnection.getConnection();
+    Connection connection = DatabaseConnectionUtil.getConnection();
     @Override
     public Article getById(int id) {
         String sql = "SELECT * FROM articles WHERE article_id = ?";
@@ -66,6 +66,7 @@ public class ArticleDaoImpl implements Dao<Article> {
                 resultSet.getInt("article_id"),
                 resultSet.getString("title"),
                 resultSet.getString("content"),
+                resultSet.getString("summary"),
                 resultSet.getString("author"),
                 resultSet.getTimestamp("publish_time"),
                 resultSet.getString("category"),
@@ -87,8 +88,9 @@ public class ArticleDaoImpl implements Dao<Article> {
                 "source_url, " +
                 "image_url, " +
                 "views, " +
-                "likes) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "likes, " +
+                "summary) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             saveArticleData(article, statement);
 
@@ -99,10 +101,10 @@ public class ArticleDaoImpl implements Dao<Article> {
 
     @Override
     public void update(Article article) {
-        String sql = "UPDATE articles SET title = ?, content = ?, author = ?, publish_time = ?, category = ?, source_url = ?, image_url = ?, views = ?, likes = ? WHERE article_id = ?";
+        String sql = "UPDATE articles SET title = ?, content = ?, author = ?, publish_time = ?, category = ?, source_url = ?, image_url = ?, views = ?, likes = ?, summary = ? WHERE article_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             saveArticleData(article, statement);
-            statement.setInt(10, article.getArticleId());
+            statement.setInt(11, article.getArticleId());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -120,6 +122,7 @@ public class ArticleDaoImpl implements Dao<Article> {
         statement.setString(7, article.getImageUrl());
         statement.setInt(8, article.getViews());
         statement.setInt(9, article.getLikes());
+        statement.setString(10, article.getSummary());
     }
 
     @Override
