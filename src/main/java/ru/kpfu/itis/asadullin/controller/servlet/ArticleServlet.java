@@ -7,9 +7,11 @@ import ru.kpfu.itis.asadullin.model.dto.CommentDto;
 import ru.kpfu.itis.asadullin.model.entity.Article;
 import ru.kpfu.itis.asadullin.model.entity.ArticleLike;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
+import ru.kpfu.itis.asadullin.model.entity.CommentLike;
 import ru.kpfu.itis.asadullin.service.dao.impl.ArticleDaoImpl;
 import ru.kpfu.itis.asadullin.service.dao.impl.ArticleLikeImpl;
 import ru.kpfu.itis.asadullin.service.dao.impl.CommentDaoImpl;
+import ru.kpfu.itis.asadullin.service.dao.impl.CommentLikeImpl;
 import ru.kpfu.itis.asadullin.service.service.impl.ArticleServiceImpl;
 import ru.kpfu.itis.asadullin.service.service.impl.CommentServiceImpl;
 
@@ -22,7 +24,7 @@ import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.List;
 
-// TODO: до конца оформить внешний вид комментария
+// TODO: при вводе нового комментария не видно юзера и нельзя лайкать его комм
 @WebServlet(name = "articleServlet", urlPatterns = "/article")
 @MultipartConfig
 public class ArticleServlet extends HttpServlet {
@@ -64,14 +66,17 @@ public class ArticleServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
 
-        if ("like".equals(action)) {
-            sendLike(resp);
+        if ("articleLike".equals(action)) {
+            sendArticleLike(resp);
         } else if ("comment".equals(action)) {
             sendComment(req, resp);
+        } else if ("commentLike".equals(action)) {
+            sendCommentLike(req, resp);
         }
     }
 
-    private void sendLike(HttpServletResponse resp) throws IOException {
+
+    private void sendArticleLike(HttpServletResponse resp) throws IOException {
         ArticleLikeImpl likeDao = new ArticleLikeImpl();
         ArticleLike like = new ArticleLike(userId, articleId);
 
@@ -106,10 +111,10 @@ public class ArticleServlet extends HttpServlet {
         Comment comment = new Comment(commentText, currentTime, userId, articleId);
         commentService.insert(comment);
 
-        List<CommentDto> updatedComments = commentService.getAllCommentsForArticle(articleId);
+        CommentDto commentDto = commentService.getById(comment);
 
         Gson gson = new Gson();
-        String jsonResponse = gson.toJson(updatedComments);
+        String jsonResponse = gson.toJson(commentDto);
 
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
@@ -131,5 +136,36 @@ public class ArticleServlet extends HttpServlet {
             }
         }
         return userId;
+    }
+
+    private void sendCommentLike(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int commentId = Integer.parseInt(req.getParameter("commentId"));
+
+        CommentLikeImpl likeDao = new CommentLikeImpl();
+        CommentDaoImpl commentDao = new CommentDaoImpl();
+        CommentLike like = new CommentLike(userId, commentId);
+        Comment comment = commentDao.getById(commentId);
+
+        boolean isCommentLiked = likeDao.isCommentLiked(like);
+
+        if (isCommentLiked) {
+            likeDao.delete(like);
+        } else {
+            likeDao.insert(like);
+        }
+
+        int count = likeDao.getLikesCount(commentId);
+        comment.setLikes(count);
+        commentDao.update(comment);
+
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
+        // Создайте объект JSON для отправки
+        JSONObject responseJSON = new JSONObject();
+        responseJSON.put("likesCount", count);
+        responseJSON.put("isCommentLiked", !isCommentLiked);
+
+        resp.getWriter().print(responseJSON);
     }
 }

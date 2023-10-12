@@ -2,8 +2,10 @@ package ru.kpfu.itis.asadullin.service.service.impl;
 
 import ru.kpfu.itis.asadullin.model.dto.CommentDto;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
+import ru.kpfu.itis.asadullin.model.entity.CommentLike;
 import ru.kpfu.itis.asadullin.model.entity.User;
 import ru.kpfu.itis.asadullin.service.dao.impl.CommentDaoImpl;
+import ru.kpfu.itis.asadullin.service.dao.impl.CommentLikeImpl;
 import ru.kpfu.itis.asadullin.service.dao.impl.UserDaoImpl;
 import ru.kpfu.itis.asadullin.service.service.Service;
 
@@ -33,15 +35,18 @@ public class CommentServiceImpl implements Service<Comment, CommentDto> {
     }
 
     private CommentDto commentToCommentDto(Comment comment) {
+        CommentLikeImpl likeDao = new CommentLikeImpl();
         User author = userDao.getById(comment.getUserId());
 
         return new CommentDto(
                 comment.getText(),
                 comment.getSendingTime(),
                 comment.getLikes(),
+                comment.getCommentId(),
                 author.getUsername(),
                 author.getProfilePicture(),
-                comment.getArticleId());
+                comment.getArticleId(),
+                likeDao.isCommentLiked(new CommentLike(author.getUserId(), comment.getCommentId())));
     }
 
     @Override

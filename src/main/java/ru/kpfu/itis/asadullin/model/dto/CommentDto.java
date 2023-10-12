@@ -1,5 +1,7 @@
 package ru.kpfu.itis.asadullin.model.dto;
 
+import ru.kpfu.itis.asadullin.model.entity.Comment;
+
 import java.sql.Timestamp;
 
 public class CommentDto {
@@ -8,18 +10,22 @@ public class CommentDto {
     private Timestamp sendingTime;
 
     private int likes;
-
+    private int commentId;
     private String username;
     private String profilePictureUrl;
     private int articleId;
 
-    public CommentDto(String text, Timestamp sendingTime, int likes, String username, String profilePictureUrl, int articleId) {
+    private boolean isLiked;
+
+    public CommentDto(String text, Timestamp sendingTime, int likes, int commentId, String username, String profilePictureUrl, int articleId, boolean isLiked) {
         this.text = text;
         this.sendingTime = sendingTime;
         this.likes = likes;
+        this.commentId = commentId;
         this.username = username;
         this.profilePictureUrl = profilePictureUrl;
         this.articleId = articleId;
+        this.isLiked = isLiked;
     }
 
     public String getText() {
@@ -46,6 +52,14 @@ public class CommentDto {
         this.likes = likes;
     }
 
+    public int getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(int commentId) {
+        this.commentId = commentId;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -68,5 +82,13 @@ public class CommentDto {
 
     public void setArticleId(int articleId) {
         this.articleId = articleId;
+    }
+
+    public boolean getIsLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
     }
 }
