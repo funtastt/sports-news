@@ -1,20 +1,33 @@
 package ru.kpfu.itis.asadullin.controller.servlet;
 
-import ru.kpfu.itis.asadullin.model.dto.UserDto;
+import com.cloudinary.Cloudinary;
 import ru.kpfu.itis.asadullin.model.entity.User;
 import ru.kpfu.itis.asadullin.service.dao.impl.UserDaoImpl;
 import ru.kpfu.itis.asadullin.service.service.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Paths;
 import java.sql.Date;
+import java.util.HashMap;
+
+import static ru.kpfu.itis.asadullin.service.util.CloudinaryUtil.getCloudinary;
 
 // TODO: Выводите на экран push-уведомление, если какие то поля не заполнены
 @WebServlet(name = "profileServlet", urlPatterns = "/profile")
+@MultipartConfig(
+        maxFileSize = 5 * 1024 * 1024,
+        maxRequestSize = 2 * 5 * 1024 * 1024
+)
 public class ProfileServlet extends HttpServlet {
     private int userId;
+    private static final int DIRECTORIES_COUNT = 100;
+    private static final String FILE_NAME_PREFIX = "/tmp";
+    private final Cloudinary cloudinary = getCloudinary();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         findUserIdInCookie(req);
@@ -27,22 +40,18 @@ public class ProfileServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
-        if (username != null && !username.isEmpty()) {
-            updateUserMainInfo(req);
-        }
-
-        if (password != null && !password.isEmpty()) {
-            User user = new User(userId);
-            user.setPassword(password);
-            UserServiceImpl service = new UserServiceImpl();
-            service.update(user);
-        }
-    }
+        updateUserMainInfo(req);
+        updatePassword(req);
+        updateProfilePicture(req, resp);
+}
 
     private void updateUserMainInfo(HttpServletRequest req) {
         String username = req.getParameter("username");
+
+        if (username == null || username.isEmpty()) {
+            return;
+        }
+
         String email = req.getParameter("email");
         String firstName = req.getParameter("first_name");
         String lastName = req.getParameter("last_name");
@@ -66,6 +75,51 @@ public class ProfileServlet extends HttpServlet {
         UserServiceImpl service = new UserServiceImpl();
 
         service.update(user);
+    }
+
+    private void updatePassword(HttpServletRequest req) {
+        String password = req.getParameter("password");
+
+        if (password == null || password.isEmpty()) {
+            return;
+        }
+
+        User user = new User(userId);
+        user.setPassword(password);
+        UserServiceImpl service = new UserServiceImpl();
+        service.update(user);
+    }
+
+    private void updateProfilePicture(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        try {
+            Part profilePicture = req.getPart("profilePicture");
+            String filename = Paths.get(profilePicture.getSubmittedFileName()).getFileName().toString();
+
+            File file = File.createTempFile(FILE_NAME_PREFIX + File.separator + (filename.hashCode() % DIRECTORIES_COUNT) + File.separator + filename, "");
+
+            InputStream content = profilePicture.getInputStream();
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+            FileOutputStream out = new FileOutputStream(file);
+            byte[] buffer = new byte[content.available()];
+            content.read(buffer);
+            out.write(buffer);
+            file.deleteOnExit();
+            out.close();
+
+            String profilePictureUrl = cloudinary.uploader().upload(file, new HashMap<>()).get("secure_url").toString();
+            System.out.println(profilePictureUrl);
+
+            User user = new User(userId);
+            user.setProfilePicture(profilePictureUrl);
+            UserServiceImpl service = new UserServiceImpl();
+            service.update(user);
+
+            resp.setContentType("text/plain");
+            resp.getWriter().write(profilePictureUrl);
+        } catch (Exception ignored) {
+
+        }
     }
 
     private void findUserIdInCookie(HttpServletRequest req) {

@@ -15,13 +15,13 @@ public class User {
     private Date registrationDate;
     private String profilePicture;
     private String bio;
-    private boolean isMale;
+    private boolean male;
 
     public User(int userId) {
         this.userId = userId;
     }
 
-    public User(int userId, String username, String email, String password, String firstName, String lastName, Date dateOfBirth, String country, String city, Date registrationDate, String profilePicture, String bio, boolean isMale) {
+    public User(int userId, String username, String email, String password, String firstName, String lastName, Date dateOfBirth, String country, String city, Date registrationDate, String profilePicture, String bio, boolean male) {
         this.userId = userId;
         this.username = username;
         this.email = email;
@@ -34,10 +34,10 @@ public class User {
         this.registrationDate = registrationDate;
         this.profilePicture = profilePicture;
         this.bio = bio;
-        this.isMale = isMale;
+        this.male = male;
     }
 
-    public User(int userId, String username, String email, String password, String firstName, String lastName, Date dateOfBirth, String country, String city, String profilePicture, String bio, boolean isMale) {
+    public User(int userId, String username, String email, String password, String firstName, String lastName, Date dateOfBirth, String country, String city, String profilePicture, String bio, boolean male) {
         this.userId = userId;
         this.username = username;
         this.email = email;
@@ -49,10 +49,10 @@ public class User {
         this.city = city;
         this.profilePicture = profilePicture;
         this.bio = bio;
-        this.isMale = isMale;
+        this.male = male;
     }
 
-    public User(String username, String email, String password, String firstName, String lastName, Date dateOfBirth, String country, String city, boolean isMale) {
+    public User(String username, String email, String password, String firstName, String lastName, Date dateOfBirth, String country, String city, boolean male) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -61,7 +61,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.country = country;
         this.city = city;
-        this.isMale = isMale;
+        this.male = male;
         this.registrationDate = new Date(System.currentTimeMillis());
     }
 
@@ -158,10 +158,10 @@ public class User {
     }
 
     public boolean isMale() {
-        return isMale;
+        return male;
     }
 
     public void setMale(boolean male) {
-        isMale = male;
+        this.male = male;
     }
 }

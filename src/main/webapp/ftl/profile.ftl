@@ -41,11 +41,13 @@
                     <div class="form-group">
                         <label>Gender:</label>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="gender" id="male" value="M">
+                            <input class="form-check-input" type="radio" name="gender" id="male" value="M"
+                                   <#if user.male>checked</#if>>
                             <label class="form-check-label" for="male">Male</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="gender" id="female" value="F">
+                            <input class="form-check-input" type="radio" name="gender" id="female" value="F"
+                                   <#if !user.male>checked</#if>>
                             <label class="form-check-label" for="female">Female</label>
                         </div>
                     </div>
@@ -59,7 +61,6 @@
                         <label for="bio">Bio:</label>
                         <input type="text" class="form-control" id="bio" name="bio" value="${user.bio}">
                     </div>
-
                     <button type="submit" class="btn btn-primary">Update</button>
                 </form>
             </div>
@@ -78,16 +79,21 @@
                 </form>
 
                 <h3 class="change-profile">Change Profile Picture</h3>
-                <form method="POST" action="/change-profile-picture" enctype="multipart/form-data" class="mt-auto">
+                <form method="POST" action="/change-profile-picture" enctype="multipart/form-data"
+                      id="changeProfilePictureForm">
                     <div class="text-center">
-                        <img src="https://dummyimage.com/400x400/dee2e6/6c757d.jpg" alt="Profile Picture" width="300"
-                             height="300">
+                        <img id="profileImage"
+                             src="<#if user.profilePicture?has_content>${user.profilePicture}<#else>https://dummyimage.com/400x400/dee2e6/6c757d.jpg</#if>"
+                             alt="Profile Picture" width="300" height="300">
                     </div>
                     <div class="form-group">
                         <label for="profilePicture">Upload new profile picture:</label>
-                        <input type="file" class="form-control" id="profilePicture" name="profile_picture">
+                        <input type="file" class="form-control" id="profilePicture" name="profilePicture"
+                               accept="image/*">
                     </div>
-                    <button type="submit" class="btn btn-primary">Change Profile Picture</button>
+                    <button id="changeProfilePictureButton" type="button" class="btn btn-primary">Change Profile
+                        Picture
+                    </button>
                 </form>
             </div>
         </div>
@@ -159,5 +165,37 @@
                 alert("Passwords are not equal!")
             }
         });
+
+        var selectedFile = null;
+
+        $("#profilePicture").change(function () {
+            if (this.files.length > 0) {
+                selectedFile = this.files[0];
+            }
+        });
+
+        $("#changeProfilePictureButton").click(function () {
+            if (selectedFile) { // Проверяем, был ли выбран файл
+                var formData = new FormData();
+                formData.append("profilePicture", selectedFile);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/profile",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (resp) {
+                        $("#profileImage").attr("src", resp);
+                    },
+                    error: function () {
+                        console.error("Error changing profile picture.");
+                    }
+                });
+            } else {
+                alert("Please select a file to upload.");
+            }
+        });
+
     </script>
 </#macro>
