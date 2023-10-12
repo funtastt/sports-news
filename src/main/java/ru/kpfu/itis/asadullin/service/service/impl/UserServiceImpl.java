@@ -20,7 +20,7 @@ public class UserServiceImpl implements Service<User, UserDto> {
     }
 
     @Override
-    public UserDto get(User user) {
+    public UserDto getById(User user) {
         return new UserDto(user.getFirstName(), user.getLastName());
     }
 

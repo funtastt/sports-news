@@ -20,7 +20,7 @@ public class ArticleServiceImpl implements Service<Article, ArticleDto> {
     }
 
     @Override
-    public ArticleDto get(Article article) {
+    public ArticleDto getById(Article article) {
         return new ArticleDto(article.getTitle(), article.getContent(), article.getSummary(), article.getAuthor(), article.getPublishTime(), article.getCategory(), article.getSourceUrl(), article.getImageUrl(), article.getViews(), article.getLikes());
     }
 

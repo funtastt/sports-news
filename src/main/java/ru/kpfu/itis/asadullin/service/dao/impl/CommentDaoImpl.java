@@ -53,23 +53,6 @@ public class CommentDaoImpl implements Dao<Comment> {
         return comments;
     }
 
-    public List<Comment> getAllCommentsForArticle(int articleId) {
-        List<Comment> comments = new ArrayList<>();
-
-        String sql = "SELECT * FROM comments WHERE article_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, articleId);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                comments.add(resultSetToComment(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return comments;
-    }
-
     @Override
     public void insert(Comment comment) {
         String sql = "INSERT INTO comments (text, sending_time, user_id, article_id) VALUES (?, ?, ?, ?)";

@@ -2,18 +2,19 @@ package ru.kpfu.itis.asadullin.controller.servlet;
 
 import com.google.gson.Gson;
 import ru.kpfu.itis.asadullin.model.dto.ArticleDto;
+import ru.kpfu.itis.asadullin.model.dto.CommentDto;
 import ru.kpfu.itis.asadullin.model.entity.Article;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
 import ru.kpfu.itis.asadullin.service.dao.impl.ArticleDaoImpl;
 import ru.kpfu.itis.asadullin.service.dao.impl.CommentDaoImpl;
 import ru.kpfu.itis.asadullin.service.service.impl.ArticleServiceImpl;
+import ru.kpfu.itis.asadullin.service.service.impl.CommentServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.List;
@@ -22,21 +23,21 @@ import java.util.List;
 @MultipartConfig
 public class ArticleServlet extends HttpServlet {
     private ArticleDaoImpl articleDao;
-    private CommentDaoImpl commentDao;
+    private CommentServiceImpl commentService;
     private int articleId;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String title = req.getParameter("title");
 
         articleDao = new ArticleDaoImpl();
-        commentDao = new CommentDaoImpl();
+        commentService = new CommentServiceImpl();
         ArticleServiceImpl service = new ArticleServiceImpl();
 
         Article currentArticle = articleDao.getByTitle(title);
-        ArticleDto articleDto = service.get(currentArticle);
+        ArticleDto articleDto = service.getById(currentArticle);
         articleId = articleDao.findArticleId(currentArticle.getContent());
 
-        List<Comment> comments = commentDao.getAllCommentsForArticle(articleId);
+        List<CommentDto> comments = commentService.getAllCommentsForArticle(articleId);
 
         req.setAttribute("article", articleDto);
         req.setAttribute("comments", comments);
@@ -52,9 +53,9 @@ public class ArticleServlet extends HttpServlet {
         int userId = findUserIdInCookie(req);
 
         Comment comment = new Comment(commentText, currentTime, userId, articleId);
-        commentDao.insert(comment);
+        commentService.insert(comment);
 
-        List<Comment> updatedComments = commentDao.getAllCommentsForArticle(articleId);
+        List<CommentDto> updatedComments = commentService.getAllCommentsForArticle(articleId);
 
         Gson gson = new Gson();
         String jsonResponse = gson.toJson(updatedComments);

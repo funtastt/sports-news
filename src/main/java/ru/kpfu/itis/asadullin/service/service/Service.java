@@ -5,7 +5,7 @@ import java.util.List;
 public interface Service<T, K> {
     List<K> getAll();
 
-    K get(T t);
+    K getById(T t);
 
     void insert(T t);
 
