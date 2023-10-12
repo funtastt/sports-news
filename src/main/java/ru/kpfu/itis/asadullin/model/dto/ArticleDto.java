@@ -1,6 +1,5 @@
 package ru.kpfu.itis.asadullin.model.dto;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 public class ArticleDto {
@@ -8,21 +7,21 @@ public class ArticleDto {
     private String content;
     private String summary;
     private String author;
+    private String authorProfilePicture;
     private Timestamp publishTime;
     private String category;
-    private String sourceUrl;
     private String imageUrl;
     private int views;
     private int likes;
 
-    public ArticleDto(String title, String content, String summary, String author, Timestamp publishTime, String category, String sourceUrl, String imageUrl, int views, int likes) {
+    public ArticleDto(String title, String content, String summary, String author, String authorProfilePicture, Timestamp publishTime, String category, String imageUrl, int views, int likes) {
         this.title = title;
         this.content = content;
         this.summary = summary;
         this.author = author;
+        this.authorProfilePicture = authorProfilePicture;
         this.publishTime = publishTime;
         this.category = category;
-        this.sourceUrl = sourceUrl;
         this.imageUrl = imageUrl;
         this.views = views;
         this.likes = likes;
@@ -64,6 +63,14 @@ public class ArticleDto {
         return publishTime;
     }
 
+    public String getAuthorProfilePicture() {
+        return authorProfilePicture;
+    }
+
+    public void setAuthorProfilePicture(String authorProfilePicture) {
+        this.authorProfilePicture = authorProfilePicture;
+    }
+
     public void setPublishTime(Timestamp publishTime) {
         this.publishTime = publishTime;
     }
@@ -74,14 +81,6 @@ public class ArticleDto {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public String getSourceUrl() {
-        return sourceUrl;
-    }
-
-    public void setSourceUrl(String sourceUrl) {
-        this.sourceUrl = sourceUrl;
     }
 
     public String getImageUrl() {

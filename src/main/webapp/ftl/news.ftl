@@ -23,14 +23,14 @@
             <#list all_news as article>
                 <div class="col-lg-6 mb-4">
                     <div class="card">
-                        <img class="card-img-top" src="${article.imageUrl}" alt="..."/>
+                        <img class="card-img-top" src="${article.imageUrl}" alt="Image">
                         <div class="card-body">
-                            <div class="small text-muted">
+                            <small class="text-muted">
                                 ${article.publishTime?string("d MMMM, HH:mm")}
                                 <span class="float-right">${article.category}</span>
-                            </div>
+                            </small>
                             <a href="article?title=${article.title}" class="text-decoration-none">
-                                <h2 class="card-title h4">${article.title}</h2>
+                                <h2 class="card-title h4" style="color: #000;" onmouseover="this.style.color='#fc3f00';" onmouseout="this.style.color='#000';">${article.title}</h2>
                             </a>
                             <a href="article?title=${article.title}" class="text-decoration-none">
                                 <p class="card-text">${article.summary}</p>
@@ -40,6 +40,8 @@
                     </div>
                 </div>
             </#list>
+
+
         </div>
     </div>
 </#macro>

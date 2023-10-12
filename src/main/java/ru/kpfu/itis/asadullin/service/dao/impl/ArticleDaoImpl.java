@@ -67,10 +67,9 @@ public class ArticleDaoImpl implements Dao<Article> {
                 resultSet.getString("title"),
                 resultSet.getString("content"),
                 resultSet.getString("summary"),
-                resultSet.getString("author"),
+                resultSet.getInt("author_id"),
                 resultSet.getTimestamp("publish_time"),
                 resultSet.getString("category"),
-                resultSet.getString("source_url"),
                 resultSet.getString("image_url"),
                 resultSet.getInt("views"),
                 resultSet.getInt("likes")
@@ -82,15 +81,14 @@ public class ArticleDaoImpl implements Dao<Article> {
         String sql = "INSERT INTO articles " +
                 "(title, " +
                 "content, " +
-                "author, " +
+                "author_id, " +
                 "publish_time, " +
                 "category, " +
-                "source_url, " +
                 "image_url, " +
                 "views, " +
                 "likes, " +
                 "summary) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             saveArticleData(article, statement);
 
@@ -101,10 +99,10 @@ public class ArticleDaoImpl implements Dao<Article> {
 
     @Override
     public void update(Article article) {
-        String sql = "UPDATE articles SET title = ?, content = ?, author = ?, publish_time = ?, category = ?, source_url = ?, image_url = ?, views = ?, likes = ?, summary = ? WHERE article_id = ?";
+        String sql = "UPDATE articles SET title = ?, content = ?, author_id = ?, publish_time = ?, category = ?, image_url = ?, views = ?, likes = ?, summary = ? WHERE article_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             saveArticleData(article, statement);
-            statement.setInt(11, article.getArticleId());
+            statement.setInt(10, article.getArticleId());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -115,14 +113,13 @@ public class ArticleDaoImpl implements Dao<Article> {
     private void saveArticleData(Article article, PreparedStatement statement) throws SQLException {
         statement.setString(1, article.getTitle());
         statement.setString(2, article.getContent());
-        statement.setString(3, article.getAuthor());
+        statement.setInt(3, article.getAuthorId());
         statement.setTimestamp(4, article.getPublishTime());
         statement.setString(5, article.getCategory());
-        statement.setString(6, article.getSourceUrl());
-        statement.setString(7, article.getImageUrl());
-        statement.setInt(8, article.getViews());
-        statement.setInt(9, article.getLikes());
-        statement.setString(10, article.getSummary());
+        statement.setString(6, article.getImageUrl());
+        statement.setInt(7, article.getViews());
+        statement.setInt(8, article.getLikes());
+        statement.setString(9, article.getSummary());
     }
 
     @Override

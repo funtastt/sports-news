@@ -5,35 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title><@title></@title></title>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-            crossorigin="anonymous"></script>
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/ticker-style.css">
+    <link rel="stylesheet" href="assets/css/flaticon.css">
+    <link rel="stylesheet" href="assets/css/slicknav.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/css/themify-icons.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/nice-select.css">
 
 </head>
 
 <body>
 <header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
-        <a class="navbar-brand" href="/news">Sport news</a>
-        <div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="/news">News</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Suggest article</a></li>
-                </ul>
+    <!-- Header Start -->
+    <div class="header-area">
+        <div class="main-header">
+            <div class="header-sticky">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-xl-10 col-lg-10 col-md-12 header-flex">
+                            <div class="sticky-logo">
+                                <a href="/news"><p>Sport news</p></a>
+                            </div>
+                            <div class="main-menu d-none d-md-block">
+                                <nav>
+                                    <ul id="navigation">
+                                        <li><a href="/news">News</a></li>
+                                        <li><a href="/profile">Profile</a></li>
+                                        <li><a href="#">Pages</a>
+                                            <ul class="submenu">
+                                                <li><a href="elements.html">Element</a></li>
+                                                <li><a href="blog.html">Blog</a></li>
+                                                <li><a href="single-blog.html">Blog Details</a></li>
+                                                <li><a href="details.html">Categori Details</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <!-- Mobile Menu -->
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-md-none"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <button class="btn btn-primary ml-auto" onclick="window.location.href='/logout'">Log out</button>
-    </nav>
+    </div>
+    <!-- Header End -->
 </header>
 
 
@@ -43,12 +68,5 @@
 <footer>
     <h3>Footer logic</h3>
 </footer>
-
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
 </body>
 </html>

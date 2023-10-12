@@ -7,36 +7,33 @@ public class Article {
     private String title;
     private String content;
     private String summary;
-    private String author;
+    private int authorId;
     private Timestamp publishTime;
     private String category;
-    private String sourceUrl;
     private String imageUrl;
     private int views;
     private int likes;
 
-    public Article(int articleId, String title, String content, String summary, String author, Timestamp publishTime, String category, String sourceUrl, String imageUrl, int views, int likes) {
+    public Article(int articleId, String title, String content, String summary, int authorId, Timestamp publishTime, String category, String imageUrl, int views, int likes) {
         this.articleId = articleId;
         this.title = title;
         this.content = content;
         this.summary = summary;
-        this.author = author;
+        this.authorId = authorId;
         this.publishTime = publishTime;
         this.category = category;
-        this.sourceUrl = sourceUrl;
         this.imageUrl = imageUrl;
         this.views = views;
         this.likes = likes;
     }
 
-    public Article(String title, String content, String summary, String author, Timestamp publishTime, String category, String sourceUrl, String imageUrl) {
+    public Article(String title, String content, String summary, int authorId, Timestamp publishTime, String category, String imageUrl) {
         this.title = title;
         this.content = content;
         this.summary = summary;
-        this.author = author;
+        this.authorId = authorId;
         this.publishTime = publishTime;
         this.category = category;
-        this.sourceUrl = sourceUrl;
         this.imageUrl = imageUrl;
     }
 
@@ -69,14 +66,17 @@ public class Article {
         this.summary = summary;
     }
 
-    public String getAuthor() {
-        return author;
+    public void setArticleId(int articleId) {
+        this.articleId = articleId;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public int getAuthorId() {
+        return authorId;
     }
 
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
     public Timestamp getPublishTime() {
         return publishTime;
     }
@@ -93,13 +93,6 @@ public class Article {
         this.category = category;
     }
 
-    public String getSourceUrl() {
-        return sourceUrl;
-    }
-
-    public void setSourceUrl(String sourceUrl) {
-        this.sourceUrl = sourceUrl;
-    }
 
     public String getImageUrl() {
         return imageUrl;
