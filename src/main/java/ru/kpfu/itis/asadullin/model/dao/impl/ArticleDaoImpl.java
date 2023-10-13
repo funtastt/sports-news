@@ -1,8 +1,8 @@
-package ru.kpfu.itis.asadullin.service.dao.impl;
+package ru.kpfu.itis.asadullin.model.dao.impl;
 
-import ru.kpfu.itis.asadullin.service.util.DatabaseConnectionUtil;
+import ru.kpfu.itis.asadullin.model.dao.Dao;
+import ru.kpfu.itis.asadullin.controller.util.DatabaseConnectionUtil;
 import ru.kpfu.itis.asadullin.model.entity.Article;
-import ru.kpfu.itis.asadullin.service.dao.Dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

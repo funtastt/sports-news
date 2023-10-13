@@ -1,13 +1,13 @@
-package ru.kpfu.itis.asadullin.service.dao.impl;
+package ru.kpfu.itis.asadullin.model.dao.impl;
 
+import ru.kpfu.itis.asadullin.model.dao.Dao;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
-import ru.kpfu.itis.asadullin.service.dao.Dao;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.kpfu.itis.asadullin.service.util.DatabaseConnectionUtil.getConnection;
+import static ru.kpfu.itis.asadullin.controller.util.DatabaseConnectionUtil.getConnection;
 
 public class CommentDaoImpl implements Dao<Comment> {
     private final Connection connection = getConnection();

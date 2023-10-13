@@ -128,30 +128,30 @@
                             .attr("width", "40")
                             .attr("height", "40")
                             .css("vertical-align", "middle"),
-                        $("<p>").addClass("user-id font-weight-bold").css("vertical-align", "middle").css("color", "#000").text(response.username)
+                        $("<span>").addClass("user-id font-weight-bold").css("vertical-align", "middle").css("color", "#000").text(response.username)
                     );
 
                     var commentDetails = $("<div>").addClass("comment-details").append(
-                        $("<div>").addClass("d-flex justify-content-between").append(
-                            $("<div>").addClass("user-info").append(
-                                $("<p>").addClass("comment-text").css("color", "#000").css("word-wrap", "break-word").text(commentText)
-                            ),
-                            $("<p>").addClass("timestamp font-weight-light").css("color", "#888").css("font-size", "12px").text(response.sendingTime)
+                        $("<div>").addClass("d-flex justify-content-between text-wrap").append(
+                            $("<p>").addClass("comment-text text-break text-justify").css("color", "#000").text(commentText)
                         ),
-                        $("<div>").css("text-align", "right").append(
-                            $("<button>").attr("type", "button").addClass("btn btn-xs btn-primary comment-like-button").attr("data-comment-id", response.commentId)
-                                .css("background-color", response.isLiked ? "#fc3f00" : "")
-                                .append(
-                                    $("<svg>").attr("xmlns", "http://www.w3.org/2000/svg").attr("width", "24").attr("height", "24").attr("viewBox", "0 0 24 24").attr("fill", "none").attr("stroke", "currentColor").attr("stroke-width", "2").attr("stroke-linecap", "round").attr("stroke-linejoin", "round").addClass("feather feather-heart").append(
-                                        $("<path>").attr("d", "M20 4.58C18.62 3.2 16.76 2.48 14.8 2.97C14.05 3.18 13.35 3.55 12.74 4.04L12 4.74L11.26 4.04C10.65 3.55 9.95 3.17 9.2 2.96C7.24 2.47 5.38 3.19 4 4.57C2.3 6.29 2.3 9.72 4 11.44L12 19.41L20 11.44C21.7 9.72 21.7 6.29 20 4.58z")
-                                    ),
-                                    $("<span>").addClass("likes-count").text(response.likes)
-                                )
-                        )
+                        $("<p>").addClass("timestamp font-weight-light").css("font-size", "12px").text(response.sendingTime)
                     );
 
+                    var likeButton = $("<button>").attr("type", "button").addClass("btn btn-xs btn-primary comment-like-button")
+                        .attr("data-comment-id", response.commentId).css("background-color", response.isLiked ? "#fc3f00" : "")
+
+                    var likeIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20 4.58C18.62 3.2 16.76 2.48 14.8 2.97C14.05 3.18 13.35 3.55 12.74 4.04L12 4.74L11.26 4.04C10.65 3.55 9.95 3.17 9.2 2.96C7.24 2.47 5.38 3.19 4 4.57C2.3 6.29 2.3 9.72 4 11.44L12 19.41L20 11.44C21.7 9.72 21.7 6.29 20 4.58z"></path></svg>';
+
+                    // Обновляем содержимое кнопки
+                    likeButton.html(likeIcon + " " + 0);
+
+                    var buttonDiv = $("<div>").css("text-align", "right").append(likeButton);
+
+                    commentDetails.append(buttonDiv);
                     commentDiv.append(userAvatar, commentDetails);
 
+                    // Вставляем новый комментарий в конец списка комментариев
                     $("#commentsSection").append(commentDiv);
                 },
                 error: function (error) {

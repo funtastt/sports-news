@@ -1,4 +1,4 @@
-package ru.kpfu.itis.asadullin.service.util;
+package ru.kpfu.itis.asadullin.controller.util;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

@@ -1,6 +1,6 @@
 package ru.kpfu.itis.asadullin.controller.servlet;
 
-import ru.kpfu.itis.asadullin.service.service.impl.UserServiceImpl;
+import ru.kpfu.itis.asadullin.model.service.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

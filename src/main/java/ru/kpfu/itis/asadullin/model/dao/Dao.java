@@ -1,4 +1,4 @@
-package ru.kpfu.itis.asadullin.service.dao;
+package ru.kpfu.itis.asadullin.model.dao;
 
 import java.util.List;
 

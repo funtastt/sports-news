@@ -2,8 +2,8 @@ package ru.kpfu.itis.asadullin.controller.servlet;
 
 import com.cloudinary.Cloudinary;
 import ru.kpfu.itis.asadullin.model.entity.User;
-import ru.kpfu.itis.asadullin.service.dao.impl.UserDaoImpl;
-import ru.kpfu.itis.asadullin.service.service.impl.UserServiceImpl;
+import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
+import ru.kpfu.itis.asadullin.model.service.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.HashMap;
 
-import static ru.kpfu.itis.asadullin.service.util.CloudinaryUtil.getCloudinary;
+import static ru.kpfu.itis.asadullin.controller.util.CloudinaryUtil.getCloudinary;
 
 // TODO: Выводите на экран push-уведомление, если какие то поля не заполнены
 @WebServlet(name = "profileServlet", urlPatterns = "/profile")

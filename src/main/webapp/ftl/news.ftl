@@ -3,19 +3,23 @@
 <#macro content>
     <div class="container">
         <div class="row">
-            <!-- Featured blog post (large card) -->
             <div class="col-lg-12 mb-4">
                 <div class="card">
-                    <a href="#!"><img class="card-img-top" src="https://dummyimage.com/1200x500/dee2e6/6c757d.jpg"
-                                      alt="..."/></a>
+                    <img class="card-img-top" src="${mostViewed.imageUrl}" alt="${mostViewed.title}"/>
+
                     <div class="card-body">
-                        <div class="small text-muted">January 1, 2023</div>
-                        <h2 class="card-title">Featured Post Title</h2>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis
-                            aliquid
-                            atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero
-                            voluptate voluptatibus possimus, veniam magni quis!</p>
-                        <a class="btn btn-primary" href="#!">Read more →</a>
+                        <small class="text-muted">
+                            ${mostViewed.publishTime?string("d MMMM, HH:mm")}
+                            <span class="float-right">${mostViewed.category}</span>
+                        </small>
+                        <a href="/article?title=${mostViewed.title}">
+                            <h2 class="card-title" style="color: #000;" onmouseover="this.style.color='#fc3f00';"
+                                onmouseout="this.style.color='#000';">${mostViewed.title}</h2>
+                        </a>
+                        <a href="/article?title=${mostViewed.title}">
+                            <p class="card-text">${mostViewed.summary}</p>
+                        </a>
+                        <a class="btn btn-primary" href="article?title=${mostViewed.title}">Read more</a>
                     </div>
                 </div>
             </div>
@@ -30,7 +34,8 @@
                                 <span class="float-right">${article.category}</span>
                             </small>
                             <a href="article?title=${article.title}" class="text-decoration-none">
-                                <h2 class="card-title h4" style="color: #000;" onmouseover="this.style.color='#fc3f00';" onmouseout="this.style.color='#000';">${article.title}</h2>
+                                <h2 class="card-title h4" style="color: #000;" onmouseover="this.style.color='#fc3f00';"
+                                    onmouseout="this.style.color='#000';">${article.title}</h2>
                             </a>
                             <a href="article?title=${article.title}" class="text-decoration-none">
                                 <p class="card-text">${article.summary}</p>

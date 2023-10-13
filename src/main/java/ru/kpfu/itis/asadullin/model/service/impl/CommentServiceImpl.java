@@ -1,13 +1,13 @@
-package ru.kpfu.itis.asadullin.service.service.impl;
+package ru.kpfu.itis.asadullin.model.service.impl;
 
+import ru.kpfu.itis.asadullin.model.dao.impl.CommentDaoImpl;
+import ru.kpfu.itis.asadullin.model.dao.impl.CommentLikeImpl;
+import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
 import ru.kpfu.itis.asadullin.model.dto.CommentDto;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
 import ru.kpfu.itis.asadullin.model.entity.CommentLike;
 import ru.kpfu.itis.asadullin.model.entity.User;
-import ru.kpfu.itis.asadullin.service.dao.impl.CommentDaoImpl;
-import ru.kpfu.itis.asadullin.service.dao.impl.CommentLikeImpl;
-import ru.kpfu.itis.asadullin.service.dao.impl.UserDaoImpl;
-import ru.kpfu.itis.asadullin.service.service.Service;
+import ru.kpfu.itis.asadullin.model.service.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +30,8 @@ public class CommentServiceImpl implements Service<Comment, CommentDto> {
 
 
     @Override
-    public CommentDto getById(Comment comment) {
-        return commentToCommentDto(comment);
+    public CommentDto getById(int id) {
+        return commentToCommentDto(commentDao.getById(id));
     }
 
     private CommentDto commentToCommentDto(Comment comment) {

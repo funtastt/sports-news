@@ -1,10 +1,10 @@
-package ru.kpfu.itis.asadullin.service.service.impl;
+package ru.kpfu.itis.asadullin.model.service.impl;
 
+import ru.kpfu.itis.asadullin.model.dao.impl.ArticleDaoImpl;
+import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
 import ru.kpfu.itis.asadullin.model.entity.Article;
 import ru.kpfu.itis.asadullin.model.dto.ArticleDto;
-import ru.kpfu.itis.asadullin.service.dao.impl.ArticleDaoImpl;
-import ru.kpfu.itis.asadullin.service.dao.impl.UserDaoImpl;
-import ru.kpfu.itis.asadullin.service.service.Service;
+import ru.kpfu.itis.asadullin.model.service.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +21,8 @@ public class ArticleServiceImpl implements Service<Article, ArticleDto> {
     }
 
     @Override
-    public ArticleDto getById(Article article) {
+    public ArticleDto getById(int id) {
+        Article article = articleDao.getById(id);
         return new ArticleDto(article.getTitle(), article.getContent(), article.getSummary(), userDao.getById(article.getAuthorId()).getFirstName() + " " + userDao.getById(article.getAuthorId()).getLastName() + " (" + userDao.getById(article.getAuthorId()).getUsername() + ")", userDao.getById(article.getAuthorId()).getProfilePicture(), article.getPublishTime(), article.getCategory(), article.getImageUrl(), article.getViews(), article.getLikes());
     }
 

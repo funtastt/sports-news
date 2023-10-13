@@ -8,12 +8,12 @@ import ru.kpfu.itis.asadullin.model.entity.Article;
 import ru.kpfu.itis.asadullin.model.entity.ArticleLike;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
 import ru.kpfu.itis.asadullin.model.entity.CommentLike;
-import ru.kpfu.itis.asadullin.service.dao.impl.ArticleDaoImpl;
-import ru.kpfu.itis.asadullin.service.dao.impl.ArticleLikeImpl;
-import ru.kpfu.itis.asadullin.service.dao.impl.CommentDaoImpl;
-import ru.kpfu.itis.asadullin.service.dao.impl.CommentLikeImpl;
-import ru.kpfu.itis.asadullin.service.service.impl.ArticleServiceImpl;
-import ru.kpfu.itis.asadullin.service.service.impl.CommentServiceImpl;
+import ru.kpfu.itis.asadullin.model.dao.impl.ArticleDaoImpl;
+import ru.kpfu.itis.asadullin.model.dao.impl.ArticleLikeImpl;
+import ru.kpfu.itis.asadullin.model.dao.impl.CommentDaoImpl;
+import ru.kpfu.itis.asadullin.model.dao.impl.CommentLikeImpl;
+import ru.kpfu.itis.asadullin.model.service.impl.ArticleServiceImpl;
+import ru.kpfu.itis.asadullin.model.service.impl.CommentServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -22,6 +22,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.List;
 
 // TODO: при вводе нового комментария не видно юзера и нельзя лайкать его комм
@@ -44,7 +45,7 @@ public class ArticleServlet extends HttpServlet {
         currentArticle = articleDao.getByTitle(title);
         currentArticle.setViews(currentArticle.getViews() + 1);
         articleDao.update(currentArticle);
-        ArticleDto articleDto = service.getById(currentArticle);
+        ArticleDto articleDto = service.getById(currentArticle.getArticleId());
 
 
         articleId = articleDao.findArticleId(currentArticle.getContent());
@@ -54,6 +55,7 @@ public class ArticleServlet extends HttpServlet {
         boolean isArticleLiked = likeDao.isArticleLiked(new ArticleLike(userId,articleId));
 
         List<CommentDto> comments = commentService.getAllCommentsForArticle(articleId);
+        comments.sort(Comparator.comparing(CommentDto::getSendingTime));
 
         req.setAttribute("article", articleDto);
         req.setAttribute("comments", comments);
@@ -111,7 +113,11 @@ public class ArticleServlet extends HttpServlet {
         Comment comment = new Comment(commentText, currentTime, userId, articleId);
         commentService.insert(comment);
 
-        CommentDto commentDto = commentService.getById(comment);
+        CommentDaoImpl commentDao = new CommentDaoImpl();
+
+        int commentId = commentDao.findCommentId(commentText, currentTime);
+
+        CommentDto commentDto = commentService.getById(commentId);
 
         Gson gson = new Gson();
         String jsonResponse = gson.toJson(commentDto);

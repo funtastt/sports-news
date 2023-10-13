@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
-import static ru.kpfu.itis.asadullin.service.util.CloudinaryUtil.getCloudinary;
+import static ru.kpfu.itis.asadullin.controller.util.CloudinaryUtil.getCloudinary;
 
 @WebServlet(name = "fileUploadingServlet", urlPatterns = "/upload")
 @MultipartConfig(

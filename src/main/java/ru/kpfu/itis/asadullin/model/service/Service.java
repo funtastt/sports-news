@@ -1,11 +1,11 @@
-package ru.kpfu.itis.asadullin.service.service;
+package ru.kpfu.itis.asadullin.model.service;
 
 import java.util.List;
 
 public interface Service<T, K> {
     List<K> getAll();
 
-    K getById(T t);
+    K getById(int id);
 
     void insert(T t);
 
