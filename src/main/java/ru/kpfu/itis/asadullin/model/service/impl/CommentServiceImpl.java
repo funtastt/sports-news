@@ -43,6 +43,7 @@ public class CommentServiceImpl implements Service<Comment, CommentDto> {
                 comment.getSendingTime(),
                 comment.getLikes(),
                 comment.getCommentId(),
+                author.getUserId(),
                 author.getUsername(),
                 author.getProfilePicture(),
                 comment.getArticleId(),

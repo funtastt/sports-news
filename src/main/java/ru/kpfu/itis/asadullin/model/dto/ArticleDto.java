@@ -7,6 +7,8 @@ public class ArticleDto {
     private String content;
     private String summary;
     private String author;
+
+    private int authorId;
     private String authorProfilePicture;
     private Timestamp publishTime;
     private String category;
@@ -14,10 +16,11 @@ public class ArticleDto {
     private int views;
     private int likes;
 
-    public ArticleDto(String title, String content, String summary, String author, String authorProfilePicture, Timestamp publishTime, String category, String imageUrl, int views, int likes) {
+    public ArticleDto(String title, String content, String summary, int authorId, String author, String authorProfilePicture, Timestamp publishTime, String category, String imageUrl, int views, int likes) {
         this.title = title;
         this.content = content;
         this.summary = summary;
+        this.authorId = authorId;
         this.author = author;
         this.authorProfilePicture = authorProfilePicture;
         this.publishTime = publishTime;
@@ -105,5 +108,13 @@ public class ArticleDto {
 
     public void setLikes(int likes) {
         this.likes = likes;
+    }
+
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
     }
 }

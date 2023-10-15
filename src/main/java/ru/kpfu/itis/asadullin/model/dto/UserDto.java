@@ -2,6 +2,9 @@ package ru.kpfu.itis.asadullin.model.dto;
 
 import ru.kpfu.itis.asadullin.model.entity.User;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Calendar;
 import java.util.Date;
 
 public class UserDto {
@@ -9,29 +12,39 @@ public class UserDto {
     private String email;
     private String firstName;
     private String lastName;
-    private Date dateOfBirth;
+    private int age;
     private String country;
     private String city;
     private Date registrationDate;
     private String profilePicture;
     private boolean isMale;
 
-    public UserDto(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
+    private String bio;
 
     public UserDto(User user) {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
-        this.dateOfBirth = user.getDateOfBirth();
+        this.age = calculateAge(user.getDateOfBirth());
         this.country = user.getCountry();
         this.city = user.getCity();
         this.registrationDate = user.getRegistrationDate();
         this.profilePicture = user.getProfilePicture();
         this.isMale = user.isMale();
+        this.bio = user.getBio();
+    }
+
+    private int calculateAge(Date dateOfBirth) {
+        java.util.Date utilDate = new java.util.Date(dateOfBirth.getTime());
+
+        LocalDate birthDate = utilDate.toInstant().atZone(Calendar.getInstance().getTimeZone().toZoneId()).toLocalDate();
+
+        LocalDate currentDate = LocalDate.now();
+
+        Period period = Period.between(birthDate, currentDate);
+
+        return period.getYears();
     }
 
     public String getUsername() {
@@ -66,12 +79,12 @@ public class UserDto {
         this.lastName = lastName;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
+    public int getAge() {
+        return age;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getCountry() {
@@ -106,11 +119,19 @@ public class UserDto {
         this.profilePicture = profilePicture;
     }
 
-    public boolean isMale() {
+    public boolean getIsMale() {
         return isMale;
     }
 
     public void setMale(boolean male) {
         isMale = male;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 }

@@ -11,17 +11,16 @@ import java.util.stream.Collectors;
 
 public class UserServiceImpl implements Service<User, UserDto> {
     private final UserDaoImpl dao = new UserDaoImpl();
+
     @Override
     public List<UserDto> getAll() {
-        return dao.getAll().stream().map(
-                u -> new UserDto(u.getFirstName(), u.getLastName())
-        ).collect(Collectors.toList());
+        return dao.getAll().stream().map(UserDto::new).collect(Collectors.toList());
     }
 
     @Override
     public UserDto getById(int id) {
         User user = dao.getById(id);
-        return new UserDto(user.getFirstName(), user.getLastName());
+        return new UserDto(user);
     }
 
     @Override

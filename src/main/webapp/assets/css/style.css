@@ -22,11 +22,6 @@ body {
     box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2)
 }
 
-.logout-button a:hover {
-    fill: #ff656a;
-    transition: fill 0.3s ease;
-}
-
 .blue-text {
     color: #00BCD4
 }

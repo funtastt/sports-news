@@ -15,7 +15,7 @@
                                      title="${article.author}">
                             </a>
                             <div class="author-name">
-                                <a href="#" rel="author" class="author-link">
+                                <a href="/user?userId=${article.authorId}" rel="author" class="author-link">
                                     <span class="author-name">${article.author}</span>
                                 </a>
                             </div>
@@ -36,7 +36,6 @@
                         </svg>
                         <span id="likesCount">${article.likes}</span>
                     </button>
-
                 </div>
             </div>
         </div>
@@ -49,12 +48,14 @@
                         <#list comments as comment>
                             <div class="comment"
                                  style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin: 10px 0;">
-                                <div class="user-avatar" style="display: flex;">
-                                    <img src="<#if comment.profilePictureUrl?has_content>${comment.profilePictureUrl}<#else>https://dummyimage.com/40x40/dee2e6/6c757d.jpg</#if>"
-                                         alt="User Avatar" width="40" height="40" style="vertical-align: middle;">
-                                    <span class="user-id font-weight-bold"
-                                          style="vertical-align: middle; color: #000;">${comment.username}</span>
-                                </div>
+                                <a href="/user?userId=${article.authorId}">
+                                    <div class="user-avatar" style="display: flex;">
+                                        <img src="<#if comment.profilePictureUrl?has_content>${comment.profilePictureUrl}<#else>https://dummyimage.com/40x40/dee2e6/6c757d.jpg</#if>"
+                                             alt="User Avatar" width="40" height="40" style="vertical-align: middle;">
+                                        <span class="user-id font-weight-bold"
+                                              style="vertical-align: middle; color: #000;">${comment.username}</span>
+                                    </div>
+                                </a>
                                 <div class="comment-details">
                                     <div class="d-flex justify-content-between text-wrap">
                                         <p class="comment-text text-break text-justify"
@@ -122,13 +123,15 @@
                         margin: "10px 0"
                     });
 
-                    var userAvatar = $("<div>").addClass("user-avatar").css("display", "flex").append(
-                        $("<img>").attr("src", response.profilePictureUrl || "https://dummyimage.com/40x40/dee2e6/6c757d.jpg")
-                            .attr("alt", "User Avatar")
-                            .attr("width", "40")
-                            .attr("height", "40")
-                            .css("vertical-align", "middle"),
-                        $("<span>").addClass("user-id font-weight-bold").css("vertical-align", "middle").css("color", "#000").text(response.username)
+                    var userAvatar = $("<a>").attr("href", "/user?userId=" + response.userId).append(
+                        $("<div>").addClass("user-avatar").css("display", "flex").append(
+                            $("<img>").attr("src", response.profilePictureUrl || "https://dummyimage.com/40x40/dee2e6/6c757d.jpg")
+                                .attr("alt", "User Avatar")
+                                .attr("width", "40")
+                                .attr("height", "40")
+                                .css("vertical-align", "middle"),
+                            $("<span>").addClass("user-id font-weight-bold").css("vertical-align", "middle").css("color", "#000").text(response.username)
+                        )
                     );
 
                     var commentDetails = $("<div>").addClass("comment-details").append(

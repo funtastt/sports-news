@@ -16,14 +16,14 @@ public class ArticleServiceImpl implements Service<Article, ArticleDto> {
     @Override
     public List<ArticleDto> getAll() {
         return articleDao.getAll().stream().map(
-                a -> new ArticleDto(a.getTitle(), a.getContent(), a.getSummary(), userDao.getById(a.getAuthorId()).getFirstName() + " " + userDao.getById(a.getAuthorId()).getLastName() + " (" + userDao.getById(a.getAuthorId()).getUsername() + ")", userDao.getById(a.getAuthorId()).getProfilePicture(), a.getPublishTime(), a.getCategory(), a.getImageUrl(), a.getViews(), a.getLikes())
+                a -> new ArticleDto(a.getTitle(), a.getContent(), a.getSummary(), a.getAuthorId(), userDao.getById(a.getAuthorId()).getFirstName() + " " + userDao.getById(a.getAuthorId()).getLastName() + " (" + userDao.getById(a.getAuthorId()).getUsername() + ")", userDao.getById(a.getAuthorId()).getProfilePicture(), a.getPublishTime(), a.getCategory(), a.getImageUrl(), a.getViews(), a.getLikes())
         ).collect(Collectors.toList());
     }
 
     @Override
     public ArticleDto getById(int id) {
         Article article = articleDao.getById(id);
-        return new ArticleDto(article.getTitle(), article.getContent(), article.getSummary(), userDao.getById(article.getAuthorId()).getFirstName() + " " + userDao.getById(article.getAuthorId()).getLastName() + " (" + userDao.getById(article.getAuthorId()).getUsername() + ")", userDao.getById(article.getAuthorId()).getProfilePicture(), article.getPublishTime(), article.getCategory(), article.getImageUrl(), article.getViews(), article.getLikes());
+        return new ArticleDto(article.getTitle(), article.getContent(), article.getSummary(),article.getAuthorId(), userDao.getById(article.getAuthorId()).getFirstName() + " " + userDao.getById(article.getAuthorId()).getLastName() + " (" + userDao.getById(article.getAuthorId()).getUsername() + ")", userDao.getById(article.getAuthorId()).getProfilePicture(), article.getPublishTime(), article.getCategory(), article.getImageUrl(), article.getViews(), article.getLikes());
     }
 
     @Override
