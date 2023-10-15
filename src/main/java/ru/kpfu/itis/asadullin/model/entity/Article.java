@@ -35,6 +35,8 @@ public class Article {
         this.publishTime = publishTime;
         this.category = category;
         this.imageUrl = imageUrl;
+        this.likes = 0;
+        this.views = 0;
     }
 
     public int getArticleId() {

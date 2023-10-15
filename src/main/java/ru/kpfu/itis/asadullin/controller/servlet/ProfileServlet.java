@@ -108,7 +108,6 @@ public class ProfileServlet extends HttpServlet {
             out.close();
 
             String profilePictureUrl = cloudinary.uploader().upload(file, new HashMap<>()).get("secure_url").toString();
-            System.out.println(profilePictureUrl);
 
             User user = new User(userId);
             user.setProfilePicture(profilePictureUrl);

@@ -15,11 +15,29 @@ body {
     background-size: 100% 100%
 }
 
+.tab-button {
+    cursor: pointer;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    background: #f2f2f2;
+}
+.tab-button:hover {
+    background: #ddd;
+}
+.tab-content {
+    display: none;
+    border: 1px solid #ccc;
+}
+
 .card {
     padding: 30px 40px;
     margin-bottom: 20px;
     border: none !important;
     box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2)
+}
+
+.card-img-top {
+    height: 350px;
 }
 
 .blue-text {
@@ -28,6 +46,14 @@ body {
 
 .form-control-label {
     margin-bottom: 0
+}
+
+.form-control-label {
+    color: #000 !important;
+}
+
+.form-control {
+    color: #000 !important;
 }
 
 input, textarea, button {
@@ -2564,24 +2590,6 @@ hr {
 
 .theme-color {
     color: #fc3f00
-}
-
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-    .header-area {
-        box-shadow: 0 10px 15px rgba(25, 25, 25, 0.1)
-    }
-}
-
-@media only screen and (min-width: 576px) and (max-width: 767px) {
-    .header-area {
-        box-shadow: 0 10px 15px rgba(25, 25, 25, 0.1)
-    }
-}
-
-@media (max-width: 767px) {
-    .header-area {
-        box-shadow: 0 10px 15px rgba(25, 25, 25, 0.1)
-    }
 }
 
 .header-area .header-top .header-info-left ul li {

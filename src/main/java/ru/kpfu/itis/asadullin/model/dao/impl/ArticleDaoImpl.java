@@ -92,6 +92,7 @@ public class ArticleDaoImpl implements Dao<Article> {
         try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             saveArticleData(article, statement);
 
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

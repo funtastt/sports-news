@@ -10,9 +10,9 @@
                     <div class="article-details">
                         <div class="author">
                             <span class="author-label">Author: </span>
-                            <a href="#">
+                            <a href="/user?userId=${article.authorId}">
                                 <img src="${article.authorProfilePicture}" alt="${article.author}"
-                                     title="${article.author}">
+                                     title="${article.author}" class="rounded-circle">
                             </a>
                             <div class="author-name">
                                 <a href="/user?userId=${article.authorId}" rel="author" class="author-link">
@@ -47,11 +47,11 @@
                     <#if comments?has_content>
                         <#list comments as comment>
                             <div class="comment"
-                                 style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin: 10px 0;">
+                                 style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
                                 <a href="/user?userId=${article.authorId}">
                                     <div class="user-avatar" style="display: flex;">
                                         <img src="<#if comment.profilePictureUrl?has_content>${comment.profilePictureUrl}<#else>https://dummyimage.com/40x40/dee2e6/6c757d.jpg</#if>"
-                                             alt="User Avatar" width="40" height="40" style="vertical-align: middle;">
+                                             alt="User Avatar" width="40" height="40" style="vertical-align: middle;" class="rounded-circle">
                                         <span class="user-id font-weight-bold"
                                               style="vertical-align: middle; color: #000;">${comment.username}</span>
                                     </div>

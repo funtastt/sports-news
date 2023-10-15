@@ -2,22 +2,8 @@
 <#macro title>Profile</#macro>
 <#macro content>
     <style>
-        .tabs {
-            display: flex;
-        }
-        .tab-button {
-            cursor: pointer;
-            padding: 10px 20px;
-            border: 1px solid #ccc;
-            background: #f2f2f2;
-        }
-        .tab-button:hover {
-            background: #ddd;
-        }
-        .tab-content {
-            display: none;
-            padding: 20px;
-            border: 1px solid #ccc;
+        h5 {
+            color: #000;
         }
     </style>
 

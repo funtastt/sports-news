@@ -5,7 +5,8 @@
         <div class="row">
             <div class="col-lg-12 mb-4">
                 <div class="card">
-                    <img class="card-img-top" src="${mostViewed.imageUrl}" alt="${mostViewed.title}"/>
+                    <img style="height: 600px;" class="card-img-top" src="${mostViewed.imageUrl}"
+                         alt="${mostViewed.title}"/>
 
                     <div class="card-body">
                         <small class="text-muted">
@@ -13,7 +14,8 @@
                             <span class="float-right">${mostViewed.category}</span>
                         </small>
                         <a href="/article?title=${mostViewed.title}">
-                            <h2 class="card-title" style="color: #000; transition: all .2s ease-out 0s;" onmouseover="this.style.color='#fc3f00';"
+                            <h2 class="card-title" style="color: #000; transition: all .2s ease-out 0s;"
+                                onmouseover="this.style.color='#fc3f00';"
                                 onmouseout="this.style.color='#000';">${mostViewed.title}</h2>
                         </a>
                         <a href="/article?title=${mostViewed.title}">
@@ -34,7 +36,8 @@
                                 <span class="float-right">${article.category}</span>
                             </small>
                             <a href="article?title=${article.title}" class="text-decoration-none">
-                                <h2 class="card-title h4" style="color: #000; transition: all .2s ease-out 0s;"  onmouseover="this.style.color='#fc3f00';"
+                                <h2 class="card-title h4" style="color: #000; transition: all .2s ease-out 0s;"
+                                    onmouseover="this.style.color='#fc3f00';"
                                     onmouseout="this.style.color='#000';">${article.title}</h2>
                             </a>
                             <a href="article?title=${article.title}" class="text-decoration-none">
