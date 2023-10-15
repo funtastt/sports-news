@@ -59,7 +59,7 @@ public class CommentDaoImpl implements Dao<Comment> {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, comment.getText());
             statement.setTimestamp(2, comment.getSendingTime());
-            statement.setInt(3, comment.getUserId());
+            statement.setInt(3, comment.getAuthorId());
             statement.setInt(4, comment.getArticleId());
 
             statement.executeUpdate();

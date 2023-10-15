@@ -9,9 +9,9 @@ import ru.kpfu.itis.asadullin.model.entity.ArticleLike;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
 import ru.kpfu.itis.asadullin.model.entity.CommentLike;
 import ru.kpfu.itis.asadullin.model.dao.impl.ArticleDaoImpl;
-import ru.kpfu.itis.asadullin.model.dao.impl.ArticleLikeImpl;
+import ru.kpfu.itis.asadullin.model.dao.impl.ArticleLikeDaoImpl;
 import ru.kpfu.itis.asadullin.model.dao.impl.CommentDaoImpl;
-import ru.kpfu.itis.asadullin.model.dao.impl.CommentLikeImpl;
+import ru.kpfu.itis.asadullin.model.dao.impl.CommentLikeDaoImpl;
 import ru.kpfu.itis.asadullin.model.service.impl.ArticleServiceImpl;
 import ru.kpfu.itis.asadullin.model.service.impl.CommentServiceImpl;
 
@@ -24,6 +24,8 @@ import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.List;
+
+import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.findUserIdInCookie;
 
 // TODO: для нового пользователя лайкнутые комментарии все равно красные
 @WebServlet(name = "articleServlet", urlPatterns = "/article")
@@ -39,7 +41,7 @@ public class ArticleServlet extends HttpServlet {
         String title = req.getParameter("title");
 
         articleDao = new ArticleDaoImpl();
-        commentService = new CommentServiceImpl();
+        commentService = new CommentServiceImpl(userId);
         ArticleServiceImpl service = new ArticleServiceImpl();
 
         currentArticle = articleDao.getByTitle(title);
@@ -51,7 +53,7 @@ public class ArticleServlet extends HttpServlet {
         articleId = articleDao.findArticleId(currentArticle.getContent());
         userId = findUserIdInCookie(req);
 
-        ArticleLikeImpl likeDao = new ArticleLikeImpl();
+        ArticleLikeDaoImpl likeDao = new ArticleLikeDaoImpl();
         boolean isArticleLiked = likeDao.isArticleLiked(new ArticleLike(userId,articleId));
 
         List<CommentDto> comments = commentService.getAllCommentsForArticle(articleId);
@@ -79,7 +81,7 @@ public class ArticleServlet extends HttpServlet {
 
 
     private void sendArticleLike(HttpServletResponse resp) throws IOException {
-        ArticleLikeImpl likeDao = new ArticleLikeImpl();
+        ArticleLikeDaoImpl likeDao = new ArticleLikeDaoImpl();
         ArticleLike like = new ArticleLike(userId, articleId);
 
         boolean isArticleLiked = likeDao.isArticleLiked(like);
@@ -130,24 +132,12 @@ public class ArticleServlet extends HttpServlet {
         out.close();
     }
 
-    private int findUserIdInCookie(HttpServletRequest req) {
-        int userId = -1;
 
-        Cookie[] cookies = req.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("user_id")) {
-                    return Integer.parseInt(cookie.getValue());
-                }
-            }
-        }
-        return userId;
-    }
 
     private void sendCommentLike(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int commentId = Integer.parseInt(req.getParameter("commentId"));
 
-        CommentLikeImpl likeDao = new CommentLikeImpl();
+        CommentLikeDaoImpl likeDao = new CommentLikeDaoImpl();
         CommentDaoImpl commentDao = new CommentDaoImpl();
         CommentLike like = new CommentLike(userId, commentId);
         Comment comment = commentDao.getById(commentId);

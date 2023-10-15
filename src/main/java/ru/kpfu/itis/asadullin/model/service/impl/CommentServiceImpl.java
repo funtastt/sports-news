@@ -1,7 +1,7 @@
 package ru.kpfu.itis.asadullin.model.service.impl;
 
 import ru.kpfu.itis.asadullin.model.dao.impl.CommentDaoImpl;
-import ru.kpfu.itis.asadullin.model.dao.impl.CommentLikeImpl;
+import ru.kpfu.itis.asadullin.model.dao.impl.CommentLikeDaoImpl;
 import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
 import ru.kpfu.itis.asadullin.model.dto.CommentDto;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
@@ -15,6 +15,12 @@ import java.util.List;
 public class CommentServiceImpl implements Service<Comment, CommentDto> {
     CommentDaoImpl commentDao = new CommentDaoImpl();
     UserDaoImpl userDao = new UserDaoImpl();
+
+    private int currentUserId;
+
+    public CommentServiceImpl(int currentUserId) {
+        this.currentUserId = currentUserId;
+    }
 
     @Override
     public List<CommentDto> getAll() {
@@ -35,8 +41,8 @@ public class CommentServiceImpl implements Service<Comment, CommentDto> {
     }
 
     private CommentDto commentToCommentDto(Comment comment) {
-        CommentLikeImpl likeDao = new CommentLikeImpl();
-        User author = userDao.getById(comment.getUserId());
+        CommentLikeDaoImpl likeDao = new CommentLikeDaoImpl();
+        User author = userDao.getById(comment.getAuthorId());
 
         return new CommentDto(
                 comment.getText(),
@@ -47,7 +53,7 @@ public class CommentServiceImpl implements Service<Comment, CommentDto> {
                 author.getUsername(),
                 author.getProfilePicture(),
                 comment.getArticleId(),
-                likeDao.isCommentLiked(new CommentLike(author.getUserId(), comment.getCommentId())));
+                likeDao.isCommentLiked(new CommentLike(currentUserId, comment.getCommentId())));
     }
 
     @Override

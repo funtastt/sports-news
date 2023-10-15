@@ -12,7 +12,7 @@ import java.util.List;
 
 import static ru.kpfu.itis.asadullin.controller.util.DatabaseConnectionUtil.getConnection;
 
-public class CommentLikeImpl implements Dao<CommentLike> {
+public class CommentLikeDaoImpl implements Dao<CommentLike> {
     Connection connection = getConnection();
 
     @Override

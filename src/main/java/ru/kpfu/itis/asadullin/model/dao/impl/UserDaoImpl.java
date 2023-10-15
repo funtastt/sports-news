@@ -28,21 +28,6 @@ public class UserDaoImpl implements Dao<User> {
         }
     }
 
-    private boolean getIsAdminById(int id) {
-        String sql = "SELECT is_admin FROM users WHERE user_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getBoolean("is_admin");
-            } else {
-                return false;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private User resultSetToUser(ResultSet resultSet) throws SQLException {
         int userId = resultSet.getInt("user_id");
         String username = resultSet.getString("username");
@@ -95,11 +80,24 @@ public class UserDaoImpl implements Dao<User> {
                     "country, " +
                     "city, " +
                     "registration_date, " +
-                    "profile_picture, " +
                     "bio, " +
                     "is_male" +
-                    ") values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            saveUserData(user, sql);
+                    ") values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, user.getUsername());
+                statement.setString(2, user.getEmail());
+                statement.setString(3, user.getPassword());
+                statement.setString(4, user.getFirstName());
+                statement.setString(5, user.getLastName());
+                statement.setDate(6, user.getDateOfBirth());
+                statement.setString(7, user.getCountry());
+                statement.setString(8, user.getCity());
+                statement.setDate(9, user.getRegistrationDate());
+                statement.setString(10, user.getBio());
+                statement.setBoolean(11, user.isMale());
+
+                statement.executeUpdate();
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -167,28 +165,6 @@ public class UserDaoImpl implements Dao<User> {
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private void saveUserData(User user, String sql) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, user.getUsername());
-            statement.setString(2, user.getEmail());
-            statement.setString(3, user.getPassword());
-            statement.setString(4, user.getFirstName());
-            statement.setString(5, user.getLastName());
-            statement.setDate(6, user.getDateOfBirth());
-            statement.setString(7, user.getCountry());
-            statement.setString(8, user.getCity());
-            statement.setDate(9, user.getRegistrationDate());
-            statement.setString(10, user.getProfilePicture());
-            statement.setString(11, user.getBio());
-            statement.setBoolean(12, user.isMale());
-            if (user.getUserId() != 0) {
-                statement.setInt(13, user.getUserId());
-            }
-
-            statement.executeUpdate();
         }
     }
 

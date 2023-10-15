@@ -6,6 +6,7 @@ import ru.kpfu.itis.asadullin.model.service.Service;
 import ru.kpfu.itis.asadullin.controller.util.PasswordUtil;
 import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,12 @@ public class UserServiceImpl implements Service<User, UserDto> {
 
     @Override
     public List<UserDto> getAll() {
-        return dao.getAll().stream().map(UserDto::new).collect(Collectors.toList());
+        List<UserDto> list = new ArrayList<>();
+        for (User user : dao.getAll()) {
+            UserDto userDto = new UserDto(user);
+            list.add(userDto);
+        }
+        return list;
     }
 
     @Override

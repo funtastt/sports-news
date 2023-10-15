@@ -1,5 +1,7 @@
 package ru.kpfu.itis.asadullin.model.dto;
 
+import ru.kpfu.itis.asadullin.model.dao.impl.FriendDaoImpl;
+import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
 import ru.kpfu.itis.asadullin.model.entity.User;
 
 import java.time.LocalDate;
@@ -8,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class UserDto {
+    private int userId;
     private String username;
     private String email;
     private String firstName;
@@ -21,7 +24,10 @@ public class UserDto {
 
     private String bio;
 
+    private boolean isAdded;
+
     public UserDto(User user) {
+        this.userId = user.getUserId();
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.firstName = user.getFirstName();
@@ -133,5 +139,21 @@ public class UserDto {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public boolean getIsAdded() {
+        return isAdded;
+    }
+
+    public void setAdded(boolean added) {
+        isAdded = added;
     }
 }

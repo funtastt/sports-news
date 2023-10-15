@@ -48,12 +48,12 @@
                         <#list comments as comment>
                             <div class="comment"
                                  style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
-                                <a href="/user?userId=${article.authorId}">
-                                    <div class="user-avatar" style="display: flex;">
+                                <a href="/user?userId=${comment.userId}">
+                                    <div class="user-avatar" style="display: flex; align-items: center;">
                                         <img src="<#if comment.profilePictureUrl?has_content>${comment.profilePictureUrl}<#else>https://dummyimage.com/40x40/dee2e6/6c757d.jpg</#if>"
-                                             alt="User Avatar" width="40" height="40" style="vertical-align: middle;" class="rounded-circle">
+                                             alt="User Avatar" width="40" height="40" style="margin-right: 8px;" class="rounded-circle">
                                         <span class="user-id font-weight-bold"
-                                              style="vertical-align: middle; color: #000;">${comment.username}</span>
+                                              style="color: #000;">${comment.username}</span>
                                     </div>
                                 </a>
                                 <div class="comment-details">
@@ -65,7 +65,7 @@
                                     </div>
                                     <div style="text-align: right;">
                                         <button type="button" class="btn btn-xs btn-primary comment-like-button"
-                                                data-comment-id="${comment.commentId}" <#if comment.isLiked> style="background-color: #fc3f00;" </#if>>
+                                                data-comment-id="${comment.commentId}" style="background-color:  <#if comment.isLiked> #fc3f00<#else> #007bff</#if>;">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                  stroke-linecap="round" stroke-linejoin="round"
@@ -162,7 +162,6 @@
                 }
             });
         });
-
 
         $("#articleLikeButton").click(function (event) {
             event.preventDefault();
