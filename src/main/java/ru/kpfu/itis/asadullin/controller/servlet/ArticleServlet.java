@@ -25,7 +25,7 @@ import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.List;
 
-// TODO: при вводе нового комментария не видно юзера и нельзя лайкать его комм
+// TODO: для нового пользователя лайкнутые комментарии все равно красные
 @WebServlet(name = "articleServlet", urlPatterns = "/article")
 @MultipartConfig
 public class ArticleServlet extends HttpServlet {
