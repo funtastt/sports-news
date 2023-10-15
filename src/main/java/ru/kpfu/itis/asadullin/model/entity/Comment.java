@@ -11,23 +11,23 @@ public class Comment {
 
     private int likes;
 
-    private int userId;
+    private int authorId;
 
     private int articleId;
 
-    public Comment(int commentId, String text, Timestamp sendingTime, int likes, int userId, int articleId) {
+    public Comment(int commentId, String text, Timestamp sendingTime, int likes, int authorId, int articleId) {
         this.commentId = commentId;
         this.text = text;
         this.sendingTime = sendingTime;
         this.likes = likes;
-        this.userId = userId;
+        this.authorId = authorId;
         this.articleId = articleId;
     }
 
-    public Comment(String text, Timestamp sendingTime, int userId, int articleId) {
+    public Comment(String text, Timestamp sendingTime, int authorId, int articleId) {
         this.text = text;
         this.sendingTime = sendingTime;
-        this.userId = userId;
+        this.authorId = authorId;
         this.articleId = articleId;
     }
 
@@ -59,12 +59,12 @@ public class Comment {
         this.likes = likes;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getAuthorId() {
+        return authorId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
     }
 
     public int getArticleId() {

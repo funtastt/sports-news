@@ -52,7 +52,7 @@ public class User {
         this.male = male;
     }
 
-    public User(String username, String email, String password, String firstName, String lastName, Date dateOfBirth, String country, String city, boolean male) {
+    public User(String username, String email, String password, String firstName, String lastName, Date dateOfBirth, String country, String city, boolean male, String bio) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -63,6 +63,7 @@ public class User {
         this.city = city;
         this.male = male;
         this.registrationDate = new Date(System.currentTimeMillis());
+        this.bio = bio;
     }
 
     public int getUserId() {

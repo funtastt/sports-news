@@ -42,6 +42,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link" href="/suggest">Suggest article</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/find_friends">Find friends</a>
+                                        </li>
                                     </ul>
                                 </nav>
                             </div>

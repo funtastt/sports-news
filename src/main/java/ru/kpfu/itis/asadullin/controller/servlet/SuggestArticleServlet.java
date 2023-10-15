@@ -1,7 +1,6 @@
 package ru.kpfu.itis.asadullin.controller.servlet;
 
 import com.cloudinary.Cloudinary;
-import net.coobird.thumbnailator.Thumbnails;
 import ru.kpfu.itis.asadullin.model.dao.impl.ArticleDaoImpl;
 import ru.kpfu.itis.asadullin.model.entity.Article;
 
@@ -14,6 +13,7 @@ import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.HashMap;
 
+import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.findUserIdInCookie;
 import static ru.kpfu.itis.asadullin.controller.util.CloudinaryUtil.getCloudinary;
 
 @WebServlet(name = "suggestArticleServlet", urlPatterns = "/suggest")
@@ -83,19 +83,5 @@ public class SuggestArticleServlet extends HttpServlet {
             }
         }
         return result.toString();
-    }
-
-    private int findUserIdInCookie(HttpServletRequest req) {
-        int userId = -1;
-
-        Cookie[] cookies = req.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("user_id")) {
-                    return Integer.parseInt(cookie.getValue());
-                }
-            }
-        }
-        return userId;
     }
 }

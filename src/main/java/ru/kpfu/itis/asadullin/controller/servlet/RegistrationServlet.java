@@ -56,7 +56,7 @@ public class RegistrationServlet extends HttpServlet {
             city = "Unknown";
         }
 
-        User user = new User(username, email, password, firstName, lastName, dateOfBirth, country, city, gender.equalsIgnoreCase("male"));
+        User user = new User(username, email, password, firstName, lastName, dateOfBirth, country, city, gender.equalsIgnoreCase("male"), "");
 
         UserServiceImpl service = new UserServiceImpl();
 
