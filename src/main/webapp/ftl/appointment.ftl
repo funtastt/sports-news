@@ -13,18 +13,6 @@
             </div>
 
             <div class="form-group">
-                <label for="date">Date:</label>
-                <input type="date" class="form-control"
-                       id="date" name="date" required>
-            </div>
-
-            <div class="form-group">
-                <label for="time">Time:</label>
-                <input type="time" class="form-control"
-                       id="time" name="time" required>
-            </div>
-
-            <div class="form-group">
                 <label for="master">Choose your master:</label>
                 <select id="master" name="master" class="form-control" required>
                     <#list masters as m>
@@ -40,6 +28,18 @@
                         <option value="${s.serviceId}">${s.name}</option>
                     </#list>
                 </select>
+            </div>
+
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" class="form-control"
+                       id="date" name="date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="time">Time:</label>
+                <input type="time" class="form-control"
+                       id="time" name="time" required>
             </div>
 
             <button type="submit" class="btn btn-primary">Apply</button>
@@ -70,6 +70,19 @@
                 }
             });
         })
+
+        $("#phone_number").change(function (event) {
+            var phoneNumber = $(this).val();
+            var phonePattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+
+            if (!phonePattern.test(phoneNumber)) {
+                $(this).css("border-color", "red");
+                $("#appointmentForm button[type='submit']").prop("disabled", true);
+            } else {
+                $(this).css("border-color", "green");
+                $("#appointmentForm button[type='submit']").prop("disabled", false);
+            }
+        });
 
 
         $("#appointmentForm").submit(function (event) {

@@ -103,17 +103,8 @@ public class AppointmentServlet extends HttpServlet {
 
         boolean isAppointmentAvailable = appointmentDao.isAppointmentAvailable(appointment);
 
-        String phoneNumberRegex = "^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$";
-
-        Pattern pattern = Pattern.compile(phoneNumberRegex);
-        Matcher matcher = pattern.matcher(phone);
-
         if (appointmentTime.compareTo(new Timestamp(System.currentTimeMillis())) < 0) {
             message = "Error! Appointment time is already in the past...";
-            isAppointmentAvailable = false;
-        } else if (!matcher.matches()) {
-            message = "Error! Can't parse your phone number...";
-            isAppointmentAvailable = false;
         } else if (!isAppointmentAvailable) {
             message = "Unfortunately, appointment for this time is impossible...";
         } else {
