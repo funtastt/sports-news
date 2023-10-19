@@ -12,9 +12,31 @@
         <div class="row justify-content-center">
             <div class="col-md-9">
                 <ul class="nav justify-content-center">
-                    <li class="tab-button" onclick="showTab('allUsersTab')">All Users</li>
                     <li class="tab-button" onclick="showTab('friendsTab')">Friends</li>
+                    <li class="tab-button" onclick="showTab('allUsersTab')">All Users</li>
                 </ul>
+
+                <div class="tab-content" id="friendsTab">
+                    <h2 class="mb-4">Friends</h2>
+
+                    <div class="row" id="user-list">
+                        <#list friends as friend>
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <a href="/user?userId=${friend.userId}">
+                                        <div class="user-avatar" style="display: flex; align-items: center;">
+                                            <img src="<#if friend.profilePicture?has_content>${friend.profilePicture}<#else>https://dummyimage.com/64x64/dee2e6/6c757d.jpg</#if>"
+                                                 alt="User Avatar" width="64" height="64" class="rounded-circle"
+                                                 style="margin-right: 16px;">
+                                            <span class="user-id font-weight-bold"
+                                                  style="color: #000;">${friend.username}</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </#list>
+                    </div>
+                </div>
 
                 <div class="tab-content" id="allUsersTab">
                     <div class="input-group d-flex align-items-center mb-3">
@@ -52,28 +74,6 @@
                         </#list>
                     </div>
                 </div>
-
-                <div class="tab-content" id="friendsTab">
-                    <h2 class="mb-4">Friends</h2>
-
-                    <div class="row" id="user-list">
-                        <#list friends as friend>
-                            <div class="col-md-4 mb-3">
-                                <div class="card">
-                                    <a href="/user?userId=${friend.userId}">
-                                        <div class="user-avatar" style="display: flex; align-items: center;">
-                                            <img src="<#if friend.profilePicture?has_content>${friend.profilePicture}<#else>https://dummyimage.com/64x64/dee2e6/6c757d.jpg</#if>"
-                                                 alt="User Avatar" width="64" height="64" class="rounded-circle"
-                                                 style="margin-right: 16px;">
-                                            <span class="user-id font-weight-bold"
-                                                  style="color: #000;">${friend.username}</span>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </#list>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -85,7 +85,7 @@
             document.getElementById(tabId).style.display = 'block';
         }
 
-        showTab('allUsersTab');
+        showTab('friendsTab');
 
         $(document).on("click", ".search-icon", function () {
             sendSearchRequest();
