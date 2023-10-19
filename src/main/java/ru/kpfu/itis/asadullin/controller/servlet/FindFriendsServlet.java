@@ -44,6 +44,13 @@ public class FindFriendsServlet extends HttpServlet {
             user.setAdded(friendDao.isFriendAdded(new Friend(currentUserId, user.getUserId(), new Timestamp(System.currentTimeMillis()))));
         }
 
+        for(UserDto user : allUsers) {
+            if (user.getUserId() == currentUserId) {
+                allUsers.remove(user);
+                break;
+            }
+        }
+
         req.setAttribute("users", allUsers);
         req.setAttribute("friends", friendsDto);
         req.getRequestDispatcher("ftl/findFriends.ftl").forward(req, resp);

@@ -57,7 +57,7 @@ public class LoginServlet extends HttpServlet {
                     session.setAttribute("username", user.getUsername());
                     session.setMaxInactiveInterval(-1);
 
-                    resp.sendRedirect("/");
+                    resp.sendRedirect("/news");
                     isFound = true;
                     break;
                 }
