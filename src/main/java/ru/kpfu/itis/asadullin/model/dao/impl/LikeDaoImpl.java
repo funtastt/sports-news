@@ -1,7 +1,8 @@
 package ru.kpfu.itis.asadullin.model.dao.impl;
 
 import ru.kpfu.itis.asadullin.model.dao.Dao;
-import ru.kpfu.itis.asadullin.model.entity.CommentLike;
+import ru.kpfu.itis.asadullin.model.entity.ArticleLike;
+import ru.kpfu.itis.asadullin.model.entity.Like;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,17 +13,17 @@ import java.util.List;
 
 import static ru.kpfu.itis.asadullin.controller.util.DatabaseConnectionUtil.getConnection;
 
-public class CommentLikeDaoImpl implements Dao<CommentLike> {
+public class LikeDaoImpl implements Dao<Like> {
     Connection connection = getConnection();
 
     @Override
-    public CommentLike getById(int id) {
-        String sql = "SELECT * FROM comment_likes WHERE id = ?";
+    public Like getById(int id) {
+        String sql = "SELECT * FROM likes WHERE like_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return resultSetToCommentLike(resultSet);
+                return resultSetToLike(resultSet);
             } else {
                 return null;
             }
@@ -31,21 +32,23 @@ public class CommentLikeDaoImpl implements Dao<CommentLike> {
         }
     }
 
-    private CommentLike resultSetToCommentLike(ResultSet resultSet) throws SQLException {
-        return new CommentLike(
+    private Like resultSetToLike(ResultSet resultSet) throws SQLException {
+        return new Like(
+                resultSet.getInt("like_id"),
                 resultSet.getInt("user_id"),
-                resultSet.getInt("comment_id")
+                resultSet.getInt("target_id"),
+                resultSet.getBoolean("is_article")
         );
     }
 
     @Override
-    public List<CommentLike> getAll() {
-        List<CommentLike> likes = new ArrayList<>();
-        String sql = "SELECT * FROM comment_likes";
+    public List<Like> getAll() {
+        List<Like> likes = new ArrayList<>();
+        String sql = "SELECT * FROM likes";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                likes.add(resultSetToCommentLike(resultSet));
+                likes.add(resultSetToLike(resultSet));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -54,12 +57,13 @@ public class CommentLikeDaoImpl implements Dao<CommentLike> {
     }
 
     @Override
-    public void insert(CommentLike commentLike) {
-        if (!isCommentLiked(commentLike)) {
-            String sql = "INSERT INTO comment_likes (user_id, comment_id) VALUES (?, ?)";
+    public void insert(Like like) {
+        if (!isLiked(like)) {
+            String sql = "INSERT INTO likes (user_id, target_id, is_article) VALUES (?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setInt(1, commentLike.getUserId());
-                statement.setInt(2, commentLike.getCommentId());
+                statement.setInt(1, like.getUserId());
+                statement.setInt(2, like.getTargetId());
+                statement.setBoolean(3, like.isArticle());
 
                 statement.executeUpdate();
             } catch (SQLException e) {
@@ -68,11 +72,13 @@ public class CommentLikeDaoImpl implements Dao<CommentLike> {
         }
     }
 
-    public boolean isCommentLiked(CommentLike commentLike) {
-        String sql = "SELECT * FROM comment_likes WHERE user_id = ? and comment_id = ?";
+    public boolean isLiked(Like like) {
+        String sql = "SELECT * FROM likes WHERE user_id = ? and target_id = ? and is_article = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, commentLike.getUserId());
-            statement.setInt(2, commentLike.getCommentId());
+            statement.setInt(1, like.getUserId());
+            statement.setInt(2, like.getTargetId());
+            statement.setBoolean(3, like.isArticle());
+
             ResultSet resultSet = statement.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
@@ -81,28 +87,31 @@ public class CommentLikeDaoImpl implements Dao<CommentLike> {
     }
 
     @Override
-    public void update(CommentLike commentLike) {
-        insert(commentLike);
+    public void update(Like like) {
+        insert(like);
     }
 
     @Override
-    public void delete(CommentLike commentLike) {
-        String sql = "DELETE FROM comment_likes WHERE user_id = ? and comment_id = ?";
+    public void delete(Like like) {
+        String sql = "DELETE FROM likes WHERE user_id = ? and target_id = ? and is_article = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, commentLike.getUserId());
-            statement.setInt(2, commentLike.getCommentId());
+            statement.setInt(1, like.getUserId());
+            statement.setInt(2, like.getTargetId());
+            statement.setBoolean(3, like.isArticle());
+
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public int getLikesCount(int commentId) {
-        String sql = "SELECT COUNT(*) FROM comment_likes WHERE comment_id = ?";
+    public int getLikesCount(int targetId, boolean isArticle) {
+        String sql = "SELECT COUNT(*) FROM likes WHERE target_id = ? and is_article = ?";
         int count = 0;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, commentId);
+            preparedStatement.setInt(1, targetId);
+            preparedStatement.setBoolean(2, isArticle);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {

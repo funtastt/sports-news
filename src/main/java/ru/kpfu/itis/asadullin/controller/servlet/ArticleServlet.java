@@ -2,16 +2,14 @@ package ru.kpfu.itis.asadullin.controller.servlet;
 
 import com.google.gson.Gson;
 import org.cloudinary.json.JSONObject;
+import ru.kpfu.itis.asadullin.model.dao.impl.LikeDaoImpl;
 import ru.kpfu.itis.asadullin.model.dto.ArticleDto;
 import ru.kpfu.itis.asadullin.model.dto.CommentDto;
 import ru.kpfu.itis.asadullin.model.entity.Article;
-import ru.kpfu.itis.asadullin.model.entity.ArticleLike;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
-import ru.kpfu.itis.asadullin.model.entity.CommentLike;
 import ru.kpfu.itis.asadullin.model.dao.impl.ArticleDaoImpl;
-import ru.kpfu.itis.asadullin.model.dao.impl.ArticleLikeDaoImpl;
 import ru.kpfu.itis.asadullin.model.dao.impl.CommentDaoImpl;
-import ru.kpfu.itis.asadullin.model.dao.impl.CommentLikeDaoImpl;
+import ru.kpfu.itis.asadullin.model.entity.Like;
 import ru.kpfu.itis.asadullin.model.service.impl.ArticleServiceImpl;
 import ru.kpfu.itis.asadullin.model.service.impl.CommentServiceImpl;
 
@@ -53,8 +51,8 @@ public class ArticleServlet extends HttpServlet {
         articleId = articleDao.findArticleId(currentArticle.getContent());
         userId = findUserIdInCookie(req);
 
-        ArticleLikeDaoImpl likeDao = new ArticleLikeDaoImpl();
-        boolean isArticleLiked = likeDao.isArticleLiked(new ArticleLike(userId,articleId));
+        LikeDaoImpl likeDao = new LikeDaoImpl();
+        boolean isArticleLiked = likeDao.isLiked(new Like(userId,articleId, true));
 
         List<CommentDto> comments = commentService.getAllCommentsForArticle(articleId);
         comments.sort(Comparator.comparing(CommentDto::getSendingTime));
@@ -81,10 +79,10 @@ public class ArticleServlet extends HttpServlet {
 
 
     private void sendArticleLike(HttpServletResponse resp) throws IOException {
-        ArticleLikeDaoImpl likeDao = new ArticleLikeDaoImpl();
-        ArticleLike like = new ArticleLike(userId, articleId);
+        LikeDaoImpl likeDao = new LikeDaoImpl();
+        Like like = new Like(userId, articleId, true);
 
-        boolean isArticleLiked = likeDao.isArticleLiked(like);
+        boolean isArticleLiked = likeDao.isLiked(like);
 
         if (isArticleLiked) {
             likeDao.delete(like);
@@ -92,7 +90,7 @@ public class ArticleServlet extends HttpServlet {
             likeDao.insert(like);
         }
 
-        int count = likeDao.getLikesCount(articleId);
+        int count = likeDao.getLikesCount(articleId, true);
         currentArticle.setLikes(count);
         articleDao.update(currentArticle);
 
@@ -137,12 +135,12 @@ public class ArticleServlet extends HttpServlet {
     private void sendCommentLike(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int commentId = Integer.parseInt(req.getParameter("commentId"));
 
-        CommentLikeDaoImpl likeDao = new CommentLikeDaoImpl();
+        LikeDaoImpl likeDao = new LikeDaoImpl();
         CommentDaoImpl commentDao = new CommentDaoImpl();
-        CommentLike like = new CommentLike(userId, commentId);
+        Like like = new Like(userId, commentId, false);
         Comment comment = commentDao.getById(commentId);
 
-        boolean isCommentLiked = likeDao.isCommentLiked(like);
+        boolean isCommentLiked = likeDao.isLiked(like);
 
         if (isCommentLiked) {
             likeDao.delete(like);
@@ -150,7 +148,7 @@ public class ArticleServlet extends HttpServlet {
             likeDao.insert(like);
         }
 
-        int count = likeDao.getLikesCount(commentId);
+        int count = likeDao.getLikesCount(commentId, false);
         comment.setLikes(count);
         commentDao.update(comment);
 

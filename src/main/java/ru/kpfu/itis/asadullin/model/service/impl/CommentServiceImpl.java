@@ -1,11 +1,11 @@
 package ru.kpfu.itis.asadullin.model.service.impl;
 
 import ru.kpfu.itis.asadullin.model.dao.impl.CommentDaoImpl;
-import ru.kpfu.itis.asadullin.model.dao.impl.CommentLikeDaoImpl;
+import ru.kpfu.itis.asadullin.model.dao.impl.LikeDaoImpl;
 import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
 import ru.kpfu.itis.asadullin.model.dto.CommentDto;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
-import ru.kpfu.itis.asadullin.model.entity.CommentLike;
+import ru.kpfu.itis.asadullin.model.entity.Like;
 import ru.kpfu.itis.asadullin.model.entity.User;
 import ru.kpfu.itis.asadullin.model.service.Service;
 
@@ -16,7 +16,7 @@ public class CommentServiceImpl implements Service<Comment, CommentDto> {
     CommentDaoImpl commentDao = new CommentDaoImpl();
     UserDaoImpl userDao = new UserDaoImpl();
 
-    private int currentUserId;
+    private final int currentUserId;
 
     public CommentServiceImpl(int currentUserId) {
         this.currentUserId = currentUserId;
@@ -41,7 +41,7 @@ public class CommentServiceImpl implements Service<Comment, CommentDto> {
     }
 
     private CommentDto commentToCommentDto(Comment comment) {
-        CommentLikeDaoImpl likeDao = new CommentLikeDaoImpl();
+        LikeDaoImpl likeDao = new LikeDaoImpl();
         User author = userDao.getById(comment.getAuthorId());
 
         return new CommentDto(
@@ -53,7 +53,7 @@ public class CommentServiceImpl implements Service<Comment, CommentDto> {
                 author.getUsername(),
                 author.getProfilePicture(),
                 comment.getArticleId(),
-                likeDao.isCommentLiked(new CommentLike(currentUserId, comment.getCommentId())));
+                likeDao.isLiked(new Like(currentUserId, comment.getCommentId(), false)));
     }
 
     @Override
