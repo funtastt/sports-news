@@ -45,11 +45,13 @@
                                         <li class="nav-item">
                                             <a class="nav-link" href="/find_friends">Find friends</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/about">About us</a>
+                                        </li>
                                     </ul>
                                 </nav>
                             </div>
                         </div>
-                        <!-- Mobile Menu -->
 
                         <div class="col-xl-2 col-lg-2 col-md-12 header-flex justify-content-between">
                             <div class="logout-button">
@@ -73,12 +75,10 @@
 </header>
 
 
-<@content></@content>
-
-
-<footer>
-    <h3>Footer logic</h3>
-</footer>
+<div class="container">
+    <@content></@content>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script></body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+</body>
 </html>
