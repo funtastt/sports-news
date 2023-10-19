@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.findUserIdInCookie;
+import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.isLoggedIn;
 
 @WebServlet(name = "findFriendsServlet", urlPatterns = "/find_friends")
 public class FindFriendsServlet extends HttpServlet {
@@ -27,6 +28,13 @@ public class FindFriendsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        boolean isLoggedIn = isLoggedIn(req);
+
+        if (!isLoggedIn) {
+            resp.sendRedirect("/login");
+            return;
+        }
+
         UserServiceImpl userService = new UserServiceImpl();
         FriendDaoImpl friendDao = new FriendDaoImpl();
         int currentUserId = findUserIdInCookie(req);
@@ -51,6 +59,7 @@ public class FindFriendsServlet extends HttpServlet {
             }
         }
 
+        req.setAttribute("isLoggedIn", true);
         req.setAttribute("users", allUsers);
         req.setAttribute("friends", friendsDto);
         req.getRequestDispatcher("ftl/findFriends.ftl").forward(req, resp);

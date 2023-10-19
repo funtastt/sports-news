@@ -17,8 +17,6 @@
                 </ul>
 
                 <div class="tab-content" id="allUsersTab">
-                    <h2 class="mb-4">All users</h2>
-
                     <div class="input-group d-flex align-items-center mb-3">
                         <input type="text" class="form-control" id="searchFriendInput" placeholder="Find friends">
                         <div class="input-group-append">

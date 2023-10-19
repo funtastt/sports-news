@@ -52,6 +52,7 @@ public class AllNewsServlet extends HttpServlet {
         req.setAttribute("mostViewed", mostViewed);
         req.setAttribute("allNews", articlesDto);
         req.setAttribute("sortType", sortTypeResp);
+        req.setAttribute("isLoggedIn", isLoggedIn(req));
 
         req.getRequestDispatcher("ftl/news.ftl").forward(req, resp);
     }
@@ -68,5 +69,17 @@ public class AllNewsServlet extends HttpServlet {
             }
         }
         return userId;
+    }
+
+    static boolean isLoggedIn(HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("user_id")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

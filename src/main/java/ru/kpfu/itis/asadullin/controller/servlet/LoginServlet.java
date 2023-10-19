@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
                 }
             }
         }
-
+        req.setAttribute("isLoggedIn", false);
         req.getRequestDispatcher("ftl/login.ftl").forward(req, resp);
     }
 

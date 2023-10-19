@@ -29,7 +29,8 @@ public class AuthenticationFilter implements Filter {
             }
         }
         if (!isUserIdEmpty & !isRemembered & session == null & !uri.contains("login") & !uri.contains("registration")) {
-            ((HttpServletResponse)servletResponse).sendRedirect("/login");
+//            ((HttpServletResponse)servletResponse).sendRedirect("/login");
+            filterChain.doFilter(servletRequest, servletResponse);
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }

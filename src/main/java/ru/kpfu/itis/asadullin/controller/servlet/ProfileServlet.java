@@ -14,6 +14,8 @@ import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.HashMap;
 
+import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.findUserIdInCookie;
+import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.isLoggedIn;
 import static ru.kpfu.itis.asadullin.controller.util.CloudinaryUtil.getCloudinary;
 
 // TODO: Выводите на экран push-уведомление, если какие то поля не заполнены
@@ -30,12 +32,18 @@ public class ProfileServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        findUserIdInCookie(req);
+        userId = findUserIdInCookie(req);
 
-        User user = new UserDaoImpl().getById(userId);
-        req.setAttribute("user", user);
+        boolean isLogged = isLoggedIn(req);
 
-        req.getRequestDispatcher("ftl/profile.ftl").forward(req, resp);
+        if (isLogged) {
+            User user = new UserDaoImpl().getById(userId);
+            req.setAttribute("user", user);
+            req.setAttribute("isLoggedIn", true);
+            req.getRequestDispatcher("ftl/profile.ftl").forward(req, resp);
+        } else {
+            resp.sendRedirect("/login");
+        }
     }
 
     @Override
@@ -118,18 +126,6 @@ public class ProfileServlet extends HttpServlet {
             resp.getWriter().write(profilePictureUrl);
         } catch (Exception ignored) {
 
-        }
-    }
-
-    private void findUserIdInCookie(HttpServletRequest req) {
-        Cookie[] cookies = req.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("user_id")) {
-                    userId = Integer.parseInt(cookie.getValue());
-                    break;
-                }
-            }
         }
     }
 }

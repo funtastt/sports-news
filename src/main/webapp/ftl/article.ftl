@@ -27,15 +27,17 @@
                     <p class="article-content" style="color: #000; margin-top: 10px;">${article.content}</p>
                     <p>Views: ${article.views}</p>
 
-                    <button type="button" id="articleLikeButton"
-                            class="btn btn-xs btn-primary" <#if isArticleLiked> style="background-color: #fc3f00;" </#if>>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                             class="feather feather-heart">
-                            <path d="M20 4.58C18.62 3.2 16.76 2.48 14.8 2.97C14.05 3.18 13.35 3.55 12.74 4.04L12 4.74L11.26 4.04C10.65 3.55 9.95 3.17 9.2 2.96C7.24 2.47 5.38 3.19 4 4.57C2.3 6.29 2.3 9.72 4 11.44L12 19.41L20 11.44C21.7 9.72 21.7 6.29 20 4.58z"></path>
-                        </svg>
-                        <span id="likesCount">${article.likes}</span>
-                    </button>
+                    <#if isLoggedIn>
+                        <button type="button" id="articleLikeButton"
+                                class="btn btn-xs btn-primary" <#if isArticleLiked> style="background-color: #fc3f00;" </#if>>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                 class="feather feather-heart">
+                                <path d="M20 4.58C18.62 3.2 16.76 2.48 14.8 2.97C14.05 3.18 13.35 3.55 12.74 4.04L12 4.74L11.26 4.04C10.65 3.55 9.95 3.17 9.2 2.96C7.24 2.47 5.38 3.19 4 4.57C2.3 6.29 2.3 9.72 4 11.44L12 19.41L20 11.44C21.7 9.72 21.7 6.29 20 4.58z"></path>
+                            </svg>
+                            <span id="likesCount">${article.likes}</span>
+                        </button>
+                    </#if>
                 </div>
             </div>
         </div>
@@ -64,16 +66,18 @@
                                            style="font-size: 12px;">${comment.sendingTime?string("dd MMMM yyyy, HH:mm")}</p>
                                     </div>
                                     <div style="text-align: right;">
-                                        <button type="button" class="btn btn-xs btn-primary comment-like-button"
-                                                data-comment-id="${comment.commentId}" style="background-color:  <#if comment.isLiked> #fc3f00<#else> #007bff</#if>;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                 stroke-linecap="round" stroke-linejoin="round"
-                                                 class="feather feather-heart">
-                                                <path d="M20 4.58C18.62 3.2 16.76 2.48 14.8 2.97C14.05 3.18 13.35 3.55 12.74 4.04L12 4.74L11.26 4.04C10.65 3.55 9.95 3.17 9.2 2.96C7.24 2.47 5.38 3.19 4 4.57C2.3 6.29 2.3 9.72 4 11.44L12 19.41L20 11.44C21.7 9.72 21.7 6.29 20 4.58z"></path>
-                                            </svg>
-                                            <span class="likes-count">${comment.likes}</span>
-                                        </button>
+                                        <#if isLoggedIn>
+                                            <button type="button" class="btn btn-xs btn-primary comment-like-button"
+                                                    data-comment-id="${comment.commentId}" style="background-color:  <#if comment.isLiked> #fc3f00<#else> #007bff</#if>;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                     stroke-linecap="round" stroke-linejoin="round"
+                                                     class="feather feather-heart">
+                                                    <path d="M20 4.58C18.62 3.2 16.76 2.48 14.8 2.97C14.05 3.18 13.35 3.55 12.74 4.04L12 4.74L11.26 4.04C10.65 3.55 9.95 3.17 9.2 2.96C7.24 2.47 5.38 3.19 4 4.57C2.3 6.29 2.3 9.72 4 11.44L12 19.41L20 11.44C21.7 9.72 21.7 6.29 20 4.58z"></path>
+                                                </svg>
+                                                <span class="likes-count">${comment.likes}</span>
+                                            </button>
+                                        </#if>
                                     </div>
                                 </div>
                             </div>
@@ -83,21 +87,23 @@
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <form id="commentForm" method="POST" action="/article">
-                    <div class="form-group">
+    <#if isLoggedIn>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <form id="commentForm" method="POST" action="/article">
+                        <div class="form-group">
                         <textarea class="form-control" id="comment" name="comment" rows="3"
                                   placeholder="Send your comment :)" style="resize: none"></textarea>
-                    </div>
-                    <div class="text-center">
-                        <button type="submit" id="submit-btn" class="btn btn-primary">Send</button>
-                    </div>
-                </form>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" id="submit-btn" class="btn btn-primary">Send</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    </#if>
     <script>
         $("#commentForm").submit(function (event) {
             event.preventDefault();

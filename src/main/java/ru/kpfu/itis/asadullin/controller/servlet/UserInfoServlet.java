@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 
 import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.findUserIdInCookie;
+import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.isLoggedIn;
 
 @WebServlet(name = "userInfoServlet", urlPatterns = "/user")
 public class UserInfoServlet extends HttpServlet {
@@ -40,6 +41,7 @@ public class UserInfoServlet extends HttpServlet {
 
         req.setAttribute("user", userDto);
         req.setAttribute("isFriendAdded", isFriendAdded);
+        req.setAttribute("isLoggedIn", isLoggedIn(req));
 
         req.getRequestDispatcher("ftl/user_info.ftl").forward(req, resp);
     }

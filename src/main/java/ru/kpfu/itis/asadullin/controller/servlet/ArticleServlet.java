@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.findUserIdInCookie;
+import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.isLoggedIn;
 
 // TODO: для нового пользователя лайкнутые комментарии все равно красные
 @WebServlet(name = "articleServlet", urlPatterns = "/article")
@@ -60,6 +61,7 @@ public class ArticleServlet extends HttpServlet {
         req.setAttribute("article", articleDto);
         req.setAttribute("comments", comments);
         req.setAttribute("isArticleLiked", isArticleLiked);
+        req.setAttribute("isLoggedIn", isLoggedIn(req));
 
         req.getRequestDispatcher("ftl/article.ftl").forward(req, resp);
     }

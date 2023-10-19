@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 
 import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.findUserIdInCookie;
+import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.isLoggedIn;
 import static ru.kpfu.itis.asadullin.controller.util.CloudinaryUtil.getCloudinary;
 
 @WebServlet(name = "suggestArticleServlet", urlPatterns = "/suggest")
@@ -22,6 +23,14 @@ public class SuggestArticleServlet extends HttpServlet {
     Cloudinary cloudinary = getCloudinary();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        boolean isLoggedIn = isLoggedIn(req);
+
+        if (!isLoggedIn) {
+            resp.sendRedirect("/login");
+            return;
+        }
+
+        req.setAttribute("isLoggedIn", true);
         req.getRequestDispatcher("ftl/suggest_article.ftl").forward(req, resp);
     }
 
