@@ -49,6 +49,19 @@ public class UserServiceImpl implements Service<User, UserDto> {
         }
     }
 
+    public boolean ifUserExists(User user) {
+        List<User> allUsers = dao.getAll();
+
+        for (User u : allUsers) {
+            if (u.getUsername().trim().equals(user.getUsername().trim()) ||
+                    u.getEmail().trim().equals(user.getEmail().trim())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public void delete(User user) {
         dao.delete(user);

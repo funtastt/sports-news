@@ -212,32 +212,39 @@
         $("#changePasswordForm").submit(function (event) {
             event.preventDefault();
 
-            let newPassword = $("#newPassword").val()
-            let confirmPassword = $("#confirmPassword").val()
+            let newPassword = $("#newPassword").val();
+            let confirmPassword = $("#confirmPassword").val();
 
-            if (newPassword === confirmPassword) {
-                $.ajax({
-                    type: "POST",
-                    url: "/profile",
-                    data: {
-                        "password": newPassword
-                    },
-                    success: function () {
-                        alert("Successfully changed password!")
-                        $("input[name='newPassword']").val('');
-                        $("input[name='confirmPassword']").val('');
-
-                    }
-                    ,
-                    error: function (error) {
-                        console.error("Error:", error);
-                    }
-                });
+            // Проверка на длину и сложность пароля
+            if (isPasswordValid(newPassword)) {
+                if (newPassword === confirmPassword) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/profile",
+                        data: {
+                            "password": newPassword
+                        },
+                        success: function () {
+                            alert("Successfully changed password!");
+                            $("#newPassword").val('');
+                            $("#confirmPassword").val('');
+                        },
+                        error: function (error) {
+                            console.error("Error:", error);
+                        }
+                    });
+                } else {
+                    alert("Passwords are not equal!");
+                }
             } else {
-                alert("Passwords are not equal!")
+                alert("Password must contain at least 8 characters, at least one uppercase letter, one lowercase letter, and one digit.");
             }
         });
 
+        function isPasswordValid(password) {
+            const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+            return passwordPattern.test(password);
+        }
         var selectedFile = null;
 
         $("#profilePicture").change(function () {

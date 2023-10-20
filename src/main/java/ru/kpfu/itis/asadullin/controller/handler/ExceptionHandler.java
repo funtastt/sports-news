@@ -12,11 +12,13 @@ import java.io.IOException;
 public class ExceptionHandler extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("isLoggedIn", false);
         handleException(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("isLoggedIn", false);
         handleException(req, resp);
     }
 

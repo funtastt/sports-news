@@ -1,7 +1,6 @@
 package ru.kpfu.itis.asadullin.model.dao.impl;
 
 import ru.kpfu.itis.asadullin.model.dao.Dao;
-import ru.kpfu.itis.asadullin.model.entity.ArticleLike;
 import ru.kpfu.itis.asadullin.model.entity.Like;
 
 import java.sql.Connection;
