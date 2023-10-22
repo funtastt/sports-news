@@ -28,7 +28,6 @@ import java.util.List;
 import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.findUserIdInCookie;
 import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.isLoggedIn;
 
-// TODO: для нового пользователя лайкнутые комментарии все равно красные
 @WebServlet(name = "articleServlet", urlPatterns = "/article")
 @MultipartConfig
 public class ArticleServlet extends HttpServlet {
