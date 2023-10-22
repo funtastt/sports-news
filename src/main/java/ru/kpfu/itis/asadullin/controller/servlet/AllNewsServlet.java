@@ -17,42 +17,33 @@ public class AllNewsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<ArticleDto> articlesDto = new ArticleServiceImpl().getAll();
-        articlesDto.sort((o1, o2) -> o2.getPublishTime().compareTo(o1.getPublishTime()));
+        articlesDto.sort((o1, o2) -> o2.getViews() - o1.getViews());
 
-        String category = req.getParameter("category");
 
-        if (category != null && !category.isEmpty()) {
-            articlesDto.removeIf(articleDto -> !articleDto.getCategory().equals(category));
-        }
+        ArticleDto mostViewed = articlesDto.remove(0);
 
-        String sortTypeString = req.getParameter("sort");
-        String sortTypeResp = "Newest";;
+        String sortType = req.getParameter("sort");
 
-        if (sortTypeString != null) {
-            int sortType = Integer.parseInt(sortTypeString);
-
+        if (sortType == null) {
+            sortType = "Newest";
+        } else {
             switch (sortType) {
-                case 0:
-                    articlesDto.sort((o1, o2) -> o2.getPublishTime().compareTo(o1.getPublishTime()));
-                    sortTypeResp = "Newest";
+                case "1":
+                    sortType = "Most viewed";
                     break;
-                case 1:
-                    articlesDto.sort((o1, o2) -> o2.getViews() - o1.getViews());
-                    sortTypeResp = "Most viewed";
+                case "2":
+                    sortType = "Most liked";
                     break;
-                case 2:
-                    articlesDto.sort((o1, o2) -> o2.getLikes() - o1.getLikes());
-                    sortTypeResp = "Most liked";
+                default:
+                    sortType = "Newest";
                     break;
             }
         }
 
-        ArticleDto mostViewed = articlesDto.remove(0);
-
         req.setAttribute("mostViewed", mostViewed);
         req.setAttribute("allNews", articlesDto);
-        req.setAttribute("sortType", sortTypeResp);
         req.setAttribute("isLoggedIn", isLoggedIn(req));
+        req.setAttribute("sortType", sortType);
 
         req.getRequestDispatcher("ftl/news.ftl").forward(req, resp);
     }
