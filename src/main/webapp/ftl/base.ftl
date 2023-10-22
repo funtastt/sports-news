@@ -58,6 +58,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link" href="/find_friends">Find friends</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/favourite">Favourite</a>
+                                        </li>
                                     </#if>
                                     <li class="nav-item">
                                         <a class="nav-link" href="/about">About us</a>

@@ -43,7 +43,7 @@ public class UserInfoServlet extends HttpServlet {
         req.setAttribute("isFriendAdded", isFriendAdded);
         req.setAttribute("isLoggedIn", isLoggedIn(req));
 
-        req.getRequestDispatcher("ftl/user_info.ftl").forward(req, resp);
+        req.getRequestDispatcher("ftl/userInfo.ftl").forward(req, resp);
     }
 
     @Override

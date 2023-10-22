@@ -62,7 +62,7 @@ public class FindFriendsServlet extends HttpServlet {
         req.setAttribute("isLoggedIn", true);
         req.setAttribute("users", allUsers);
         req.setAttribute("friends", friendsDto);
-        req.getRequestDispatcher("ftl/find_friends.ftl").forward(req, resp);
+        req.getRequestDispatcher("ftl/findFriends.ftl").forward(req, resp);
     }
 
     @Override

@@ -31,7 +31,7 @@ public class SuggestArticleServlet extends HttpServlet {
         }
 
         req.setAttribute("isLoggedIn", true);
-        req.getRequestDispatcher("ftl/suggest_article.ftl").forward(req, resp);
+        req.getRequestDispatcher("ftl/suggestArticle.ftl").forward(req, resp);
     }
 
     @Override
