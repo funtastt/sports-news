@@ -26,7 +26,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between text-wrap">
-                        <p class="article-content text-break text-justify" style="color: #000; margin-top: 10px;">${article.content}</p>
+                        <p class="article-content text-break text-justify"
+                           style="color: #000; margin-top: 10px;">${article.content}</p>
                     </div>
                     <p>Views: ${article.views}</p>
 
@@ -40,6 +41,20 @@
                                 <path d="M20 4.58C18.62 3.2 16.76 2.48 14.8 2.97C14.05 3.18 13.35 3.55 12.74 4.04L12 4.74L11.26 4.04C10.65 3.55 9.95 3.17 9.2 2.96C7.24 2.47 5.38 3.19 4 4.57C2.3 6.29 2.3 9.72 4 11.44L12 19.41L20 11.44C21.7 9.72 21.7 6.29 20 4.58z"></path>
                             </svg>
                             <span id="likesCount">${article.likes}</span>
+                        </button>
+
+                        <button type="button" id="addToFavouriteButton"
+                                class="btn btn-xs btn-primary" <#if isArticleFavoured> style="background-color: #DAA520;" </#if>>
+                            <svg height="24" width="24" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32.219 32.219"
+                                 xml:space="preserve" fill="#fff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <g>
+                                        <path style="fill:#fff;"
+                                              d="M32.144,12.402c-0.493-1.545-3.213-1.898-6.09-2.277c-1.578-0.209-3.373-0.445-3.914-0.844 c-0.543-0.398-1.304-2.035-1.978-3.482C18.94,3.17,17.786,0.686,16.166,0.68l-0.03-0.003c-1.604,0.027-2.773,2.479-4.016,5.082 c-0.684,1.439-1.463,3.07-2.005,3.463c-0.551,0.394-2.342,0.613-3.927,0.803c-2.877,0.352-5.598,0.68-6.108,2.217 c-0.507,1.539,1.48,3.424,3.587,5.424c1.156,1.094,2.465,2.34,2.67,2.98c0.205,0.639-0.143,2.414-0.448,3.977 c-0.557,2.844-1.084,5.535,0.219,6.5c0.312,0.225,0.704,0.338,1.167,0.328c1.331-0.023,3.247-1.059,5.096-2.062 c1.387-0.758,2.961-1.611,3.661-1.621c0.675,0.002,2.255,0.881,3.647,1.654c1.891,1.051,3.852,2.139,5.185,2.119 c0.414-0.01,0.771-0.117,1.06-0.322c1.312-0.947,0.814-3.639,0.285-6.494c-0.289-1.564-0.615-3.344-0.409-3.982 c0.213-0.639,1.537-1.867,2.702-2.955C30.628,15.808,32.634,13.945,32.144,12.402z M21.473,19.355h-3.722v3.797h-3.237v-3.797 h-3.768v-3.238h3.768v-3.691h3.237v3.691h3.722V19.355z"></path>
+                                    </g>
+                                </g></svg>
                         </button>
                     </#if>
                 </div>
@@ -205,6 +220,33 @@
             });
         });
 
+        $("#addToFavouriteButton").click(function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "/article",
+                data: {
+                    "action": "favoured"
+                },
+                dataType: "json",
+                success: function (resp) {
+                    var favouriteIcon = '<svg height="24" width="24" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32.219 32.219" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g> <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g> <g id="SVGRepo_iconCarrier"> <g> <path style="fill:#fff;" d="M32.144,12.402c-0.493-1.545-3.213-1.898-6.09-2.277c-1.578-0.209-3.373-0.445-3.914-0.844 c-0.543-0.398-1.304-2.035-1.978-3.482C18.94,3.17,17.786,0.686,16.166,0.68l-0.03-0.003c-1.604,0.027-2.773,2.479-4.016,5.082 c-0.684,1.439-1.463,3.07-2.005,3.463c-0.551,0.394-2.342,0.613-3.927,0.803c-2.877,0.352-5.598,0.68-6.108,2.217 c-0.507,1.539,1.48,3.424,3.587,5.424c1.156,1.094,2.465,2.34,2.67,2.98c0.205,0.639-0.143,2.414-0.448,3.977 c-0.557,2.844-1.084,5.535,0.219,6.5c0.312,0.225,0.704,0.338,1.167,0.328c1.331-0.023,3.247-1.059,5.096-2.062 c1.387-0.758,2.961-1.611,3.661-1.621c0.675,0.002,2.255,0.881,3.647,1.654c1.891,1.051,3.852,2.139,5.185,2.119 c0.414-0.01,0.771-0.117,1.06-0.322c1.312-0.947,0.814-3.639,0.285-6.494c-0.289-1.564-0.615-3.344-0.409-3.982 c0.213-0.639,1.537-1.867,2.702-2.955C30.628,15.808,32.634,13.945,32.144,12.402z M21.473,19.355h-3.722v3.797h-3.237v-3.797 h-3.768v-3.238h3.768v-3.691h3.237v3.691h3.722V19.355z"></path> </g> </g></svg>'
+
+                    $("#addToFavouriteButton").html(favouriteIcon);
+
+                    if (resp.isArticleFavoured) {
+                        $("#addToFavouriteButton").css("background-color", "#DAA520");
+                    } else {
+                        $("#addToFavouriteButton").css("background-color", "#007bff");
+                    }
+                },
+                error: function (error) {
+                    console.error("Ошибка:", error);
+                }
+            });
+        });
+
         $(document).on("click", ".comment-like-button", function (event) {
             event.preventDefault();
 
@@ -253,22 +295,8 @@
             });
         }
 
-        function handleArticleWidthChange() {
-            var article = $('.article');
-            var articleContent = article.find('.article-content');
-            var thresholdWidth = 500;
-
-            if (article.width() < thresholdWidth) {
-                articleContent.css('white-space', 'normal');
-            } else {
-                articleContent.css('white-space', 'nowrap');
-            }
-        }
-
-        $(window).on('resize', handleArticleWidthChange);
         $(window).on('resize', handleCommentWidthChange);
 
-        handleArticleWidthChange();
         handleCommentWidthChange();
 
     </script>

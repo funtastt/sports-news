@@ -2,6 +2,7 @@ package ru.kpfu.itis.asadullin.controller.servlet;
 
 import com.google.gson.Gson;
 import org.cloudinary.json.JSONObject;
+import ru.kpfu.itis.asadullin.model.dao.impl.FavouriteDaoImpl;
 import ru.kpfu.itis.asadullin.model.dao.impl.LikeDaoImpl;
 import ru.kpfu.itis.asadullin.model.dto.ArticleDto;
 import ru.kpfu.itis.asadullin.model.dto.CommentDto;
@@ -9,6 +10,7 @@ import ru.kpfu.itis.asadullin.model.entity.Article;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
 import ru.kpfu.itis.asadullin.model.dao.impl.ArticleDaoImpl;
 import ru.kpfu.itis.asadullin.model.dao.impl.CommentDaoImpl;
+import ru.kpfu.itis.asadullin.model.entity.Favourite;
 import ru.kpfu.itis.asadullin.model.entity.Like;
 import ru.kpfu.itis.asadullin.model.service.impl.ArticleServiceImpl;
 import ru.kpfu.itis.asadullin.model.service.impl.CommentServiceImpl;
@@ -55,13 +57,18 @@ public class ArticleServlet extends HttpServlet {
         LikeDaoImpl likeDao = new LikeDaoImpl();
         boolean isArticleLiked = likeDao.isLiked(new Like(userId,articleId, true));
 
+        FavouriteDaoImpl favouriteDao = new FavouriteDaoImpl();
+        boolean isArticleFavoured = favouriteDao.isFavoured(new Favourite(userId, articleId));
+
         List<CommentDto> comments = commentService.getAllCommentsForArticle(articleId);
         comments.sort(Comparator.comparing(CommentDto::getSendingTime));
 
         req.setAttribute("article", articleDto);
         req.setAttribute("comments", comments);
         req.setAttribute("isArticleLiked", isArticleLiked);
+        req.setAttribute("isArticleLiked", isArticleLiked);
         req.setAttribute("isLoggedIn", isLoggedIn(req));
+        req.setAttribute("isArticleFavoured", isArticleFavoured);
 
         req.getRequestDispatcher("ftl/article.ftl").forward(req, resp);
     }
@@ -76,7 +83,31 @@ public class ArticleServlet extends HttpServlet {
             sendComment(req, resp);
         } else if ("commentLike".equals(action)) {
             sendCommentLike(req, resp);
+        } else if ("favoured".equals(action)) {
+            sendArticleFavoured(resp);
         }
+    }
+
+    private void sendArticleFavoured(HttpServletResponse resp) throws IOException{
+        FavouriteDaoImpl favouriteDao = new FavouriteDaoImpl();
+        Favourite favourite = new Favourite(userId, articleId);
+
+        boolean isArticleFavoured = favouriteDao.isFavoured(favourite);
+
+        if (isArticleFavoured) {
+            favouriteDao.delete(favourite);
+        } else {
+            favouriteDao.insert(favourite);
+        }
+
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
+        // Создайте объект JSON для отправки
+        JSONObject responseJSON = new JSONObject();
+        responseJSON.put("isArticleFavoured", !isArticleFavoured);
+
+        resp.getWriter().print(responseJSON);
     }
 
 
