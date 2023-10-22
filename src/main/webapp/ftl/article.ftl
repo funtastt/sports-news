@@ -61,7 +61,7 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container" style="margin-top: 20px;">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div id="commentsSection">
@@ -114,7 +114,7 @@
     </div>
     <#if isLoggedIn>
         <div class="container">
-            <div class="row justify-content-center">
+            <div class="row justify-content-center" style="margin-top:20px;">
                 <div class="col-md-4">
                     <form id="commentForm" method="POST" action="/article">
                         <div class="form-group">
@@ -122,7 +122,7 @@
                                   placeholder="Send your comment :)" style="resize: none"></textarea>
                         </div>
                         <div class="text-center">
-                            <button type="submit" id="submit-btn" class="btn btn-primary">Send</button>
+                            <button style="margin-bottom:20px;" type="submit" id="submit-btn" class="btn btn-primary">Send</button>
                         </div>
                     </form>
                 </div>

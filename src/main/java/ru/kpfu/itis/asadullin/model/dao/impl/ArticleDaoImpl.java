@@ -13,7 +13,6 @@ import java.util.List;
 
 
 public class ArticleDaoImpl implements Dao<Article> {
-    // TODO: проблемы, если в названии статьи зарезервированные символы, например кавычки (")
     Connection connection = DatabaseConnectionUtil.getConnection();
     @Override
     public Article getById(int id) {
@@ -112,7 +111,7 @@ public class ArticleDaoImpl implements Dao<Article> {
     }
 
     private void saveArticleData(Article article, PreparedStatement statement) throws SQLException {
-        statement.setString(1, article.getTitle());
+        statement.setString(1, article.getTitle().replace("\"", ""));
         statement.setString(2, article.getContent());
         statement.setInt(3, article.getAuthorId());
         statement.setTimestamp(4, article.getPublishTime());

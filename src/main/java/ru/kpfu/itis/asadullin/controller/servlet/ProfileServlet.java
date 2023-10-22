@@ -18,7 +18,6 @@ import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.findUserI
 import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.isLoggedIn;
 import static ru.kpfu.itis.asadullin.controller.util.CloudinaryUtil.getCloudinary;
 
-// TODO: Выводите на экран push-уведомление, если какие то поля не заполнены
 @WebServlet(name = "profileServlet", urlPatterns = "/profile")
 @MultipartConfig(
         maxFileSize = 5 * 1024 * 1024,
