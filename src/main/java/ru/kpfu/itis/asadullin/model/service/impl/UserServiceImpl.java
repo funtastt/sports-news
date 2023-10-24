@@ -1,14 +1,13 @@
 package ru.kpfu.itis.asadullin.model.service.impl;
 
 import ru.kpfu.itis.asadullin.model.entity.User;
-import ru.kpfu.itis.asadullin.model.dto.UserDto;
+import ru.kpfu.itis.asadullin.controller.util.dto.UserDto;
 import ru.kpfu.itis.asadullin.model.service.Service;
 import ru.kpfu.itis.asadullin.controller.util.PasswordUtil;
 import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserServiceImpl implements Service<User, UserDto> {
     private final UserDaoImpl dao = new UserDaoImpl();

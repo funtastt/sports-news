@@ -3,7 +3,7 @@ package ru.kpfu.itis.asadullin.model.service.impl;
 import ru.kpfu.itis.asadullin.model.dao.impl.CommentDaoImpl;
 import ru.kpfu.itis.asadullin.model.dao.impl.LikeDaoImpl;
 import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
-import ru.kpfu.itis.asadullin.model.dto.CommentDto;
+import ru.kpfu.itis.asadullin.controller.util.dto.CommentDto;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
 import ru.kpfu.itis.asadullin.model.entity.Like;
 import ru.kpfu.itis.asadullin.model.entity.User;

@@ -2,7 +2,7 @@ package ru.kpfu.itis.asadullin.controller.servlet;
 
 import ru.kpfu.itis.asadullin.model.dao.impl.ArticleDaoImpl;
 import ru.kpfu.itis.asadullin.model.dao.impl.FavouriteDaoImpl;
-import ru.kpfu.itis.asadullin.model.dto.ArticleDto;
+import ru.kpfu.itis.asadullin.controller.util.dto.ArticleDto;
 import ru.kpfu.itis.asadullin.model.entity.Favourite;
 import ru.kpfu.itis.asadullin.model.service.impl.ArticleServiceImpl;
 

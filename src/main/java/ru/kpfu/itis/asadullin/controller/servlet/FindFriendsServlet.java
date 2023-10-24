@@ -2,10 +2,8 @@ package ru.kpfu.itis.asadullin.controller.servlet;
 
 import com.google.gson.Gson;
 import ru.kpfu.itis.asadullin.model.dao.impl.FriendDaoImpl;
-import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
-import ru.kpfu.itis.asadullin.model.dto.UserDto;
+import ru.kpfu.itis.asadullin.controller.util.dto.UserDto;
 import ru.kpfu.itis.asadullin.model.entity.Friend;
-import ru.kpfu.itis.asadullin.model.entity.User;
 import ru.kpfu.itis.asadullin.model.service.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;

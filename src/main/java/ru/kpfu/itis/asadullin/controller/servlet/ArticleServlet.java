@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import org.cloudinary.json.JSONObject;
 import ru.kpfu.itis.asadullin.model.dao.impl.FavouriteDaoImpl;
 import ru.kpfu.itis.asadullin.model.dao.impl.LikeDaoImpl;
-import ru.kpfu.itis.asadullin.model.dto.ArticleDto;
-import ru.kpfu.itis.asadullin.model.dto.CommentDto;
+import ru.kpfu.itis.asadullin.controller.util.dto.ArticleDto;
+import ru.kpfu.itis.asadullin.controller.util.dto.CommentDto;
 import ru.kpfu.itis.asadullin.model.entity.Article;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
 import ru.kpfu.itis.asadullin.model.dao.impl.ArticleDaoImpl;
@@ -38,19 +38,18 @@ public class ArticleServlet extends HttpServlet {
     private int userId;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String title = req.getParameter("title");
+        articleId = Integer.parseInt(req.getParameter("articleId"));
 
         articleDao = new ArticleDaoImpl();
         commentService = new CommentServiceImpl(userId);
         ArticleServiceImpl service = new ArticleServiceImpl();
 
-        currentArticle = articleDao.getByTitle(title);
+        currentArticle = articleDao.getById(articleId);
+
         currentArticle.setViews(currentArticle.getViews() + 1);
         articleDao.update(currentArticle);
-        ArticleDto articleDto = service.getById(currentArticle.getArticleId());
+        ArticleDto articleDto = service.getById(articleId);
 
-
-        articleId = articleDao.findArticleId(currentArticle.getContent());
         userId = findUserIdInCookie(req);
 
         LikeDaoImpl likeDao = new LikeDaoImpl();

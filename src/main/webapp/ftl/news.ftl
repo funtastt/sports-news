@@ -27,7 +27,7 @@
                                 <span class="float-right">${mostViewed.category}</span>
                             </a>
                         </small>
-                        <a href="/article?title=${mostViewed.title}">
+                        <a href="/article?articleId=${mostViewed.articleId}">
                             <h2 class="card-title" style="color: #000; transition: all .2s ease-out 0s;"
                                 onmouseover="this.style.color='#fc3f00';"
                                 onmouseout="this.style.color='#000';">${mostViewed.title}</h2>
@@ -59,7 +59,7 @@
                             <a href="article?title=${article.title}" class="text-decoration-none">
                                 <p class="card-text">${article.summary}</p>
                             </a>
-                            <a class="btn btn-primary" href="article?title=${article.title}">Read more</a>
+                            <a class="btn btn-primary" href="article?articleId=${article.articleId}">Read more</a>
                         </div>
                     </div>
                 </div>

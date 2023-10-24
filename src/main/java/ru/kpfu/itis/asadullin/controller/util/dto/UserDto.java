@@ -1,4 +1,4 @@
-package ru.kpfu.itis.asadullin.model.dto;
+package ru.kpfu.itis.asadullin.controller.util.dto;
 
 import ru.kpfu.itis.asadullin.model.dao.impl.FriendDaoImpl;
 import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;

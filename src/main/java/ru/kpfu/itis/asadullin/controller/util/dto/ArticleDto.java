@@ -1,9 +1,10 @@
-package ru.kpfu.itis.asadullin.model.dto;
+package ru.kpfu.itis.asadullin.controller.util.dto;
 
 import java.sql.Timestamp;
 
 public class ArticleDto {
     private String title;
+    private int articleId;
     private String content;
     private String summary;
     private String author;
@@ -16,9 +17,10 @@ public class ArticleDto {
     private int views;
     private int likes;
 
-    public ArticleDto(String title, String content, String summary, int authorId, String author, String authorProfilePicture, Timestamp publishTime, String category, String imageUrl, int views, int likes) {
+    public ArticleDto(String title, String content, int articleId, String summary, int authorId, String author, String authorProfilePicture, Timestamp publishTime, String category, String imageUrl, int views, int likes) {
         this.title = title;
         this.content = content;
+        this.articleId = articleId;
         this.summary = summary;
         this.authorId = authorId;
         this.author = author;
@@ -116,5 +118,13 @@ public class ArticleDto {
 
     public void setAuthorId(int authorId) {
         this.authorId = authorId;
+    }
+
+    public int getArticleId() {
+        return articleId;
+    }
+
+    public void setArticleId(int articleId) {
+        this.articleId = articleId;
     }
 }

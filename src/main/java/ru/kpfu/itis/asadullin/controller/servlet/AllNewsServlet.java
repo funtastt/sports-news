@@ -1,6 +1,6 @@
 package ru.kpfu.itis.asadullin.controller.servlet;
 
-import ru.kpfu.itis.asadullin.model.dto.ArticleDto;
+import ru.kpfu.itis.asadullin.controller.util.dto.ArticleDto;
 import ru.kpfu.itis.asadullin.model.service.impl.ArticleServiceImpl;
 
 import javax.servlet.ServletException;

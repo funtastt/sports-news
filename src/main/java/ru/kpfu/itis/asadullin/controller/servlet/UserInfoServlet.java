@@ -1,13 +1,12 @@
 package ru.kpfu.itis.asadullin.controller.servlet;
 
 import ru.kpfu.itis.asadullin.model.dao.impl.FriendDaoImpl;
-import ru.kpfu.itis.asadullin.model.dto.UserDto;
+import ru.kpfu.itis.asadullin.controller.util.dto.UserDto;
 import ru.kpfu.itis.asadullin.model.entity.Friend;
 import ru.kpfu.itis.asadullin.model.service.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
