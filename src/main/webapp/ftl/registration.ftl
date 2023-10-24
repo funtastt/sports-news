@@ -88,11 +88,11 @@
 
     <script>
         $("#registrationForm").on("submit", function(event) {
-            event.preventDefault();
 
             var password = $("#password").val();
 
             if (!isPasswordValid(password)) {
+                event.preventDefault();
                 $("#password").addClass("is-invalid");
                 return;
             }
@@ -114,6 +114,8 @@
                 success: function(response) {
                     if (response === 'false') {
                         alert('User with this username or email already exists!')
+                    } else {
+                        event.
                     }
                 },
                 error: function(error) {

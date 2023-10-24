@@ -40,11 +40,10 @@ public class RegistrationServlet extends HttpServlet {
 
         if (!ifUserExists) {
             service.insert(user);
-            resp.sendRedirect("/login");
         } else {
             req.setAttribute("isLoggedIn", false);
             resp.getWriter().write(String.valueOf(false));
         }
-
+        resp.sendRedirect("/login");
     }
 }
