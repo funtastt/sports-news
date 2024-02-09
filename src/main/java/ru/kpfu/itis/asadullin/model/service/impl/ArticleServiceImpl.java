@@ -10,7 +10,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ArticleServiceImpl implements Service<Article, ArticleDto> {
-    private final ArticleDaoImpl articleDao = new ArticleDaoImpl();
+    public ArticleServiceImpl(ArticleDaoImpl articleDao) {
+        this.articleDao = articleDao;
+    }
+
+    private final ArticleDaoImpl articleDao;
     private final UserDaoImpl userDao = new UserDaoImpl();
 
     @Override

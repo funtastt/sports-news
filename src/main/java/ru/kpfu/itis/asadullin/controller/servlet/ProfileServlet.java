@@ -3,8 +3,10 @@ package ru.kpfu.itis.asadullin.controller.servlet;
 import com.cloudinary.Cloudinary;
 import ru.kpfu.itis.asadullin.model.entity.User;
 import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
+import ru.kpfu.itis.asadullin.model.service.impl.ArticleServiceImpl;
 import ru.kpfu.itis.asadullin.model.service.impl.UserServiceImpl;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -29,6 +31,15 @@ public class ProfileServlet extends HttpServlet {
     private static final String FILE_NAME_PREFIX = "/tmp";
     private final Cloudinary cloudinary = getCloudinary();
 
+    UserDaoImpl userDao;
+    UserServiceImpl userService;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        userDao = (UserDaoImpl) config.getServletContext().getAttribute("userDao");
+        userService = (UserServiceImpl) config.getServletContext().getAttribute("userService");
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         userId = findUserIdInCookie(req);
@@ -36,7 +47,7 @@ public class ProfileServlet extends HttpServlet {
         boolean isLogged = isLoggedIn(req);
 
         if (isLogged) {
-            User user = new UserDaoImpl().getById(userId);
+            User user = userDao.getById(userId);
             req.setAttribute("user", user);
             req.setAttribute("isLoggedIn", true);
             req.getRequestDispatcher("ftl/profile.ftl").forward(req, resp);
@@ -79,9 +90,8 @@ public class ProfileServlet extends HttpServlet {
         user.setCity(city);
         user.setBio(bio);
 
-        UserServiceImpl service = new UserServiceImpl();
 
-        service.update(user);
+        userService.update(user);
     }
 
     private void updatePassword(HttpServletRequest req) {
@@ -93,8 +103,7 @@ public class ProfileServlet extends HttpServlet {
 
         User user = new User(userId);
         user.setPassword(password);
-        UserServiceImpl service = new UserServiceImpl();
-        service.update(user);
+        userService.update(user);
     }
 
     private void updateProfilePicture(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -118,8 +127,7 @@ public class ProfileServlet extends HttpServlet {
 
             User user = new User(userId);
             user.setProfilePicture(profilePictureUrl);
-            UserServiceImpl service = new UserServiceImpl();
-            service.update(user);
+            userService.update(user);
 
             resp.setContentType("text/plain");
             resp.getWriter().write(profilePictureUrl);

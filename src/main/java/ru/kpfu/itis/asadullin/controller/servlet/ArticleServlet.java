@@ -2,19 +2,17 @@ package ru.kpfu.itis.asadullin.controller.servlet;
 
 import com.google.gson.Gson;
 import org.cloudinary.json.JSONObject;
-import ru.kpfu.itis.asadullin.model.dao.impl.FavouriteDaoImpl;
-import ru.kpfu.itis.asadullin.model.dao.impl.LikeDaoImpl;
+import ru.kpfu.itis.asadullin.model.dao.impl.*;
 import ru.kpfu.itis.asadullin.controller.util.dto.ArticleDto;
 import ru.kpfu.itis.asadullin.controller.util.dto.CommentDto;
 import ru.kpfu.itis.asadullin.model.entity.Article;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
-import ru.kpfu.itis.asadullin.model.dao.impl.ArticleDaoImpl;
-import ru.kpfu.itis.asadullin.model.dao.impl.CommentDaoImpl;
 import ru.kpfu.itis.asadullin.model.entity.Favourite;
 import ru.kpfu.itis.asadullin.model.entity.Like;
 import ru.kpfu.itis.asadullin.model.service.impl.ArticleServiceImpl;
 import ru.kpfu.itis.asadullin.model.service.impl.CommentServiceImpl;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -31,31 +29,41 @@ import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.isLoggedI
 @WebServlet(name = "articleServlet", urlPatterns = "/article")
 @MultipartConfig
 public class ArticleServlet extends HttpServlet {
-    private ArticleDaoImpl articleDao;
     private Article currentArticle;
     private CommentServiceImpl commentService;
+    private CommentDaoImpl commentDao;
     private int articleId;
     private int userId;
+    ArticleServiceImpl articleService;
+    ArticleDaoImpl articleDao;
+    FavouriteDaoImpl favouriteDao;
+    LikeDaoImpl likeDao;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        articleService = (ArticleServiceImpl) config.getServletContext().getAttribute("articleService");
+        articleDao = (ArticleDaoImpl) config.getServletContext().getAttribute("articleDao");
+        commentDao = (CommentDaoImpl) config.getServletContext().getAttribute("commentDao");
+        likeDao = (LikeDaoImpl) config.getServletContext().getAttribute("likeDao");
+        favouriteDao = (FavouriteDaoImpl) config.getServletContext().getAttribute("favouriteDao");
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         articleId = Integer.parseInt(req.getParameter("articleId"));
 
-        articleDao = new ArticleDaoImpl();
         commentService = new CommentServiceImpl(userId);
-        ArticleServiceImpl service = new ArticleServiceImpl();
 
         currentArticle = articleDao.getById(articleId);
 
         currentArticle.setViews(currentArticle.getViews() + 1);
         articleDao.update(currentArticle);
-        ArticleDto articleDto = service.getById(articleId);
+        ArticleDto articleDto = articleService.getById(articleId);
 
         userId = findUserIdInCookie(req);
 
-        LikeDaoImpl likeDao = new LikeDaoImpl();
         boolean isArticleLiked = likeDao.isLiked(new Like(userId,articleId, true));
 
-        FavouriteDaoImpl favouriteDao = new FavouriteDaoImpl();
         boolean isArticleFavoured = favouriteDao.isFavoured(new Favourite(userId, articleId));
 
         List<CommentDto> comments = commentService.getAllCommentsForArticle(articleId);
@@ -87,7 +95,6 @@ public class ArticleServlet extends HttpServlet {
     }
 
     private void sendArticleFavoured(HttpServletResponse resp) throws IOException{
-        FavouriteDaoImpl favouriteDao = new FavouriteDaoImpl();
         Favourite favourite = new Favourite(userId, articleId);
 
         boolean isArticleFavoured = favouriteDao.isFavoured(favourite);
@@ -110,7 +117,6 @@ public class ArticleServlet extends HttpServlet {
 
 
     private void sendArticleLike(HttpServletResponse resp) throws IOException {
-        LikeDaoImpl likeDao = new LikeDaoImpl();
         Like like = new Like(userId, articleId, true);
 
         boolean isArticleLiked = likeDao.isLiked(like);
@@ -144,7 +150,6 @@ public class ArticleServlet extends HttpServlet {
         Comment comment = new Comment(commentText, currentTime, userId, articleId);
         commentService.insert(comment);
 
-        CommentDaoImpl commentDao = new CommentDaoImpl();
 
         int commentId = commentDao.findCommentId(commentText, currentTime);
 
@@ -167,7 +172,6 @@ public class ArticleServlet extends HttpServlet {
         int commentId = Integer.parseInt(req.getParameter("commentId"));
 
         LikeDaoImpl likeDao = new LikeDaoImpl();
-        CommentDaoImpl commentDao = new CommentDaoImpl();
         Like like = new Like(userId, commentId, false);
         Comment comment = commentDao.getById(commentId);
 

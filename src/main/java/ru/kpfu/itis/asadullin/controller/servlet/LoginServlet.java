@@ -4,7 +4,9 @@ import ru.kpfu.itis.asadullin.model.entity.User;
 import ru.kpfu.itis.asadullin.model.dao.Dao;
 import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
 import ru.kpfu.itis.asadullin.controller.util.PasswordUtil;
+import ru.kpfu.itis.asadullin.model.service.impl.ArticleServiceImpl;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -13,6 +15,12 @@ import java.util.List;
 
 @WebServlet(name = "loginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
+    UserDaoImpl userDao;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        userDao = (UserDaoImpl) config.getServletContext().getAttribute("userDao");
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -36,8 +44,7 @@ public class LoginServlet extends HttpServlet {
         String rememberMe = req.getParameter("remember_me");
 
         if (username != null & password != null) {
-            Dao<User> service = new UserDaoImpl();
-            List<User> users = service.getAll();
+            List<User> users = userDao.getAll();
 
             boolean isFound = false;
             for (User user : users) {

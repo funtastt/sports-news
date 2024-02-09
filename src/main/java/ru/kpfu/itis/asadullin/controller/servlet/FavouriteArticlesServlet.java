@@ -6,6 +6,7 @@ import ru.kpfu.itis.asadullin.controller.util.dto.ArticleDto;
 import ru.kpfu.itis.asadullin.model.entity.Favourite;
 import ru.kpfu.itis.asadullin.model.service.impl.ArticleServiceImpl;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,12 +21,20 @@ import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.isLoggedI
 
 @WebServlet(name = "favouriteArticlesServlet", urlPatterns = "/favourite")
 public class FavouriteArticlesServlet extends HttpServlet {
+    ArticleServiceImpl articleService;
+    ArticleDaoImpl articleDao;
+    FavouriteDaoImpl favouriteDao;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        articleService = (ArticleServiceImpl) config.getServletContext().getAttribute("articleService");
+        favouriteDao = (FavouriteDaoImpl) config.getServletContext().getAttribute("favouriteDao");
+        articleDao = (ArticleDaoImpl) config.getServletContext().getAttribute("articleDao");
+    }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<ArticleDto> articlesDto = new ArticleServiceImpl().getAll();
+        List<ArticleDto> articlesDto = articleService.getAll();
         List<ArticleDto> favouriteArticles = new ArrayList<>();
-        FavouriteDaoImpl favouriteDao = new FavouriteDaoImpl();
-        ArticleDaoImpl articleDao = new ArticleDaoImpl();
 
         int userId = findUserIdInCookie(req);
 

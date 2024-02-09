@@ -3,7 +3,9 @@ package ru.kpfu.itis.asadullin.controller.servlet;
 import com.cloudinary.Cloudinary;
 import ru.kpfu.itis.asadullin.model.dao.impl.ArticleDaoImpl;
 import ru.kpfu.itis.asadullin.model.entity.Article;
+import ru.kpfu.itis.asadullin.model.service.impl.ArticleServiceImpl;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +23,12 @@ import static ru.kpfu.itis.asadullin.controller.util.CloudinaryUtil.getCloudinar
 @MultipartConfig
 public class SuggestArticleServlet extends HttpServlet {
     Cloudinary cloudinary = getCloudinary();
+    ArticleDaoImpl articleDao;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        articleDao = (ArticleDaoImpl) config.getServletContext().getAttribute("articleDao");
+    }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         boolean isLoggedIn = isLoggedIn(req);
@@ -56,7 +64,6 @@ public class SuggestArticleServlet extends HttpServlet {
 
         Article article = new Article(title, content, summary, authorId, publishTime, category, imageUrl);
 
-        ArticleDaoImpl articleDao = new ArticleDaoImpl();
         articleDao.insert(article);
 
         resp.sendRedirect("/news");

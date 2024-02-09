@@ -6,6 +6,7 @@ import ru.kpfu.itis.asadullin.controller.util.dto.UserDto;
 import ru.kpfu.itis.asadullin.model.entity.Friend;
 import ru.kpfu.itis.asadullin.model.service.impl.UserServiceImpl;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,6 +25,13 @@ import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.isLoggedI
 public class FindFriendsServlet extends HttpServlet {
     private List<UserDto> allUsers;
 
+    FriendDaoImpl friendDao;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        friendDao = (FriendDaoImpl) config.getServletContext().getAttribute("friendDao");
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         boolean isLoggedIn = isLoggedIn(req);
@@ -34,7 +42,6 @@ public class FindFriendsServlet extends HttpServlet {
         }
 
         UserServiceImpl userService = new UserServiceImpl();
-        FriendDaoImpl friendDao = new FriendDaoImpl();
         int currentUserId = findUserIdInCookie(req);
         allUsers = userService.getAll();
         List<Friend> friends = friendDao.getAllForUserId(currentUserId);

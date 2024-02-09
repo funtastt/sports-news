@@ -2,8 +2,10 @@ package ru.kpfu.itis.asadullin.controller.servlet;
 
 import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
 import ru.kpfu.itis.asadullin.model.entity.User;
+import ru.kpfu.itis.asadullin.model.service.impl.ArticleServiceImpl;
 import ru.kpfu.itis.asadullin.model.service.impl.UserServiceImpl;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -12,6 +14,14 @@ import java.sql.Date;
 
 @WebServlet(name = "registrationServlet", urlPatterns = "/registration")
 public class RegistrationServlet extends HttpServlet {
+
+    UserServiceImpl userService;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        userService = (UserServiceImpl) config.getServletContext().getAttribute("userService");
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("isLoggedIn", false);
@@ -34,16 +44,14 @@ public class RegistrationServlet extends HttpServlet {
 
         User user = new User(username, email, password, firstName, lastName, dateOfBirth, country, city, gender.equalsIgnoreCase("male"), "");
 
-        UserServiceImpl service = new UserServiceImpl();
-
-        boolean ifUserExists = service.ifUserExists(user);
+        boolean ifUserExists = userService.ifUserExists(user);
 
         if (!ifUserExists) {
-            service.insert(user);
+            userService.insert(user);
+            resp.sendRedirect("/login");
         } else {
             req.setAttribute("isLoggedIn", false);
             resp.getWriter().write(String.valueOf(false));
         }
-        resp.sendRedirect("/login");
     }
 }

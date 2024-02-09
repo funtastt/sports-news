@@ -3,8 +3,10 @@ package ru.kpfu.itis.asadullin.controller.servlet;
 import ru.kpfu.itis.asadullin.model.dao.impl.FriendDaoImpl;
 import ru.kpfu.itis.asadullin.controller.util.dto.UserDto;
 import ru.kpfu.itis.asadullin.model.entity.Friend;
+import ru.kpfu.itis.asadullin.model.service.impl.ArticleServiceImpl;
 import ru.kpfu.itis.asadullin.model.service.impl.UserServiceImpl;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,9 +21,16 @@ import static ru.kpfu.itis.asadullin.controller.servlet.AllNewsServlet.isLoggedI
 @WebServlet(name = "userInfoServlet", urlPatterns = "/user")
 public class UserInfoServlet extends HttpServlet {
     FriendDaoImpl friendDao;
+    UserServiceImpl userService;
     int currUserId, friendId;
 
     Friend friend;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        friendDao = (FriendDaoImpl) config.getServletContext().getAttribute("friendDao");
+        userService = (UserServiceImpl) config.getServletContext().getAttribute("userService");
+    }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         currUserId = findUserIdInCookie(req);
@@ -31,11 +40,9 @@ public class UserInfoServlet extends HttpServlet {
             return;
         }
 
-        friendDao = new FriendDaoImpl();
-
         friend = new Friend(currUserId, friendId, new Timestamp(System.currentTimeMillis()));
 
-        UserDto userDto = new UserServiceImpl().getById(friendId);
+        UserDto userDto = userService.getById(friendId);
         boolean isFriendAdded = friendDao.isFriendAdded(friend);
 
         req.setAttribute("user", userDto);
@@ -52,8 +59,6 @@ public class UserInfoServlet extends HttpServlet {
             friendId = Integer.parseInt(req.getParameter("friendId"));
             friend = new Friend(currUserId, friendId, new Timestamp(System.currentTimeMillis()));
         }
-
-        FriendDaoImpl friendDao = new FriendDaoImpl();
 
         boolean isFriendAdded = friendDao.isFriendAdded(friend);
 
