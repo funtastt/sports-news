@@ -1,68 +1,61 @@
 package ru.kpfu.itis.asadullin.model.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.kpfu.itis.asadullin.model.entity.User;
-import ru.kpfu.itis.asadullin.controller.util.dto.UserDto;
-import ru.kpfu.itis.asadullin.model.service.Service;
-import ru.kpfu.itis.asadullin.controller.util.PasswordUtil;
-import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
+import ru.kpfu.itis.asadullin.model.repositories.UserRepository;
+import ru.kpfu.itis.asadullin.util.dto.UserDto;
+import ru.kpfu.itis.asadullin.model.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class UserServiceImpl implements Service<User, UserDto> {
-    private final UserDaoImpl dao = new UserDaoImpl();
+@Service
+public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public List<UserDto> getAll() {
-        List<UserDto> list = new ArrayList<>();
-        for (User user : dao.getAll()) {
-            UserDto userDto = new UserDto(user);
-            list.add(userDto);
-        }
-        return list;
+        return userRepository.findAll().stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public UserDto getById(int id) {
-        User user = dao.getById(id);
-        return new UserDto(user);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return mapToDto(user);
     }
 
     @Override
     public void insert(User user) {
-        user.setPassword(PasswordUtil.encrypt(user.getPassword()));
-        dao.insert(user);
+        userRepository.save(user);
     }
 
     @Override
     public void update(User user) {
-        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-            user.setPassword(PasswordUtil.encrypt(user.getPassword()));
-            dao.updatePassword(user);
-        }
-        if (user.getProfilePicture() != null && !user.getProfilePicture().isEmpty()) {
-            dao.updateProfilePicture(user);
-        }
-        if (user.getUsername() != null && !user.getUsername().isEmpty()) {
-            dao.updateMainInfo(user);
-        }
+        userRepository.save(user);
     }
 
+    @Override
     public boolean ifUserExists(User user) {
-        List<User> allUsers = dao.getAll();
-
-        for (User u : allUsers) {
-            if (u.getUsername().trim().equals(user.getUsername().trim()) ||
-                    u.getEmail().trim().equals(user.getEmail().trim())) {
-                return true;
-            }
-        }
-
-        return false;
+        return userRepository.existsById(user.getUserId());
     }
 
     @Override
     public void delete(User user) {
-        dao.delete(user);
+        userRepository.delete(user);
+    }
+
+    private UserDto mapToDto(User user) {
+        return new UserDto(
+                user
+        );
     }
 }

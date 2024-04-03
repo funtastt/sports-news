@@ -1,40 +1,27 @@
 package ru.kpfu.itis.asadullin.model.entity;
 
-public class Favourite {
-    private int favouriteId, userId, articleId;
+import lombok.*;
+import javax.persistence.*;
 
-    public Favourite(int favouriteId, int userId, int articleId) {
-        this.favouriteId = favouriteId;
-        this.userId = userId;
-        this.articleId = articleId;
-    }
+@Entity
+@Table(name = "favorites")
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Favourite {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "favourite_id")
+    private int favouriteId;
+    @Column(name = "user_id")
+    private int userId;
+    @Column(name = "article_id")
+    private int articleId;
 
     public Favourite(int userId, int articleId) {
         this.userId = userId;
-        this.articleId = articleId;
-    }
-
-    public int getFavouriteId() {
-        return favouriteId;
-    }
-
-    public void setFavouriteId(int favouriteId) {
-        this.favouriteId = favouriteId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getArticleId() {
-        return articleId;
-    }
-
-    public void setArticleId(int articleId) {
         this.articleId = articleId;
     }
 }

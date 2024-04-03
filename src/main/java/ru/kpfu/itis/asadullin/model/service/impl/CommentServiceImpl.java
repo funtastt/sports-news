@@ -1,84 +1,74 @@
 package ru.kpfu.itis.asadullin.model.service.impl;
 
-import ru.kpfu.itis.asadullin.model.dao.impl.CommentDaoImpl;
-import ru.kpfu.itis.asadullin.model.dao.impl.LikeDaoImpl;
-import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
-import ru.kpfu.itis.asadullin.controller.util.dto.CommentDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ru.kpfu.itis.asadullin.util.dto.CommentDto;
 import ru.kpfu.itis.asadullin.model.entity.Comment;
-import ru.kpfu.itis.asadullin.model.entity.Like;
-import ru.kpfu.itis.asadullin.model.entity.User;
-import ru.kpfu.itis.asadullin.model.service.Service;
+import ru.kpfu.itis.asadullin.model.repositories.CommentRepository;
+import ru.kpfu.itis.asadullin.model.service.CommentService;
+import ru.kpfu.itis.asadullin.model.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class CommentServiceImpl implements Service<Comment, CommentDto> {
-    CommentDaoImpl commentDao = new CommentDaoImpl();
-    UserDaoImpl userDao = new UserDaoImpl();
+@Service
+public class CommentServiceImpl implements CommentService {
+    private final CommentRepository commentRepository;
+    private final UserService userService;
 
-    private final int currentUserId;
-
-    public CommentServiceImpl(int currentUserId) {
-        this.currentUserId = currentUserId;
+    @Autowired
+    public CommentServiceImpl(CommentRepository commentRepository, UserService userService) {
+        this.commentRepository = commentRepository;
+        this.userService = userService;
     }
 
     @Override
     public List<CommentDto> getAll() {
-        List<Comment> comments = commentDao.getAll();
-        List<CommentDto> commentsDto = new ArrayList<>();
-
-        for (Comment comment : comments) {
-            commentsDto.add(commentToCommentDto(comment));
-        }
-
-        return commentsDto;
+        return commentRepository.findAll().stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
-
 
     @Override
     public CommentDto getById(int id) {
-        return commentToCommentDto(commentDao.getById(id));
+        Comment comment = commentRepository.getById(id);
+        return mapToDto(comment);
     }
 
-    private CommentDto commentToCommentDto(Comment comment) {
-        LikeDaoImpl likeDao = new LikeDaoImpl();
-        User author = userDao.getById(comment.getAuthorId());
+    @Override
+    public void insert(Comment comment) {
+        commentRepository.insert(comment.getText(), comment.getSendingTime(), comment.getAuthorId(), comment.getArticleId());
+    }
 
+    @Override
+    public void update(Comment comment) {
+        commentRepository.update(comment.getCommentId(), comment.getText(), comment.getSendingTime(), comment.getLikes());
+    }
+
+    @Override
+    public void delete(Comment comment) {
+        commentRepository.delete(comment.getCommentId());
+    }
+
+    @Override
+    public List<CommentDto> getAllCommentsForArticle(int articleId) {
+        return commentRepository.findAll().stream()
+                .filter(comment -> comment.getArticleId() == articleId)
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    private CommentDto mapToDto(Comment comment) {
         return new CommentDto(
                 comment.getText(),
                 comment.getSendingTime(),
                 comment.getLikes(),
                 comment.getCommentId(),
-                author.getUserId(),
-                author.getUsername(),
-                author.getProfilePicture(),
+                comment.getAuthorId(),
+                userService.getById(comment.getAuthorId()).getFirstName(),
+                userService.getById(comment.getAuthorId()).getProfilePicture(),
                 comment.getArticleId(),
-                likeDao.isLiked(new Like(currentUserId, comment.getCommentId(), false)));
-    }
-
-    @Override
-    public void insert(Comment comment) {
-        commentDao.insert(comment);
-    }
-
-    @Override
-    public void update(Comment comment) {
-        commentDao.update(comment);
-    }
-
-    @Override
-    public void delete(Comment comment) {
-        commentDao.delete(comment);
-    }
-
-    public List<CommentDto> getAllCommentsForArticle(int articleId) {
-        List<CommentDto> allComments = getAll();
-        List<CommentDto> result = new ArrayList<>();
-
-        for (CommentDto comment: allComments) {
-            if (comment.getArticleId() == articleId) result.add(comment);
-        }
-
-        return result;
+                false // You need to implement checking if the current user has liked this comment
+        );
     }
 }

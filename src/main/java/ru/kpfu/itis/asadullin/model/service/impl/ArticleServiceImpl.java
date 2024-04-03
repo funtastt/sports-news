@@ -1,47 +1,66 @@
 package ru.kpfu.itis.asadullin.model.service.impl;
 
-import ru.kpfu.itis.asadullin.model.dao.impl.ArticleDaoImpl;
-import ru.kpfu.itis.asadullin.model.dao.impl.UserDaoImpl;
+import org.springframework.stereotype.Service;
+import ru.kpfu.itis.asadullin.util.dto.ArticleDto;
 import ru.kpfu.itis.asadullin.model.entity.Article;
-import ru.kpfu.itis.asadullin.controller.util.dto.ArticleDto;
-import ru.kpfu.itis.asadullin.model.service.Service;
+import ru.kpfu.itis.asadullin.model.repository.ArticleRepository;
+import ru.kpfu.itis.asadullin.model.service.ArticleService;
+import ru.kpfu.itis.asadullin.model.service.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ArticleServiceImpl implements Service<Article, ArticleDto> {
-    public ArticleServiceImpl(ArticleDaoImpl articleDao) {
-        this.articleDao = articleDao;
-    }
+@Service
+public class ArticleServiceImpl implements ArticleService {
+    private final ArticleRepository articleRepository;
 
-    private final ArticleDaoImpl articleDao;
-    private final UserDaoImpl userDao = new UserDaoImpl();
+    public ArticleServiceImpl(ArticleRepository articleRepository, UserService userService) {
+        this.articleRepository = articleRepository;
+    }
 
     @Override
     public List<ArticleDto> getAll() {
-        return articleDao.getAll().stream().map(
-                a -> new ArticleDto(a.getTitle(), a.getContent(), a.getArticleId(), a.getSummary(), a.getAuthorId(), userDao.getById(a.getAuthorId()).getFirstName() + " " + userDao.getById(a.getAuthorId()).getLastName() + " (" + userDao.getById(a.getAuthorId()).getUsername() + ")", userDao.getById(a.getAuthorId()).getProfilePicture(), a.getPublishTime(), a.getCategory(), a.getImageUrl(), a.getViews(), a.getLikes())
-        ).collect(Collectors.toList());
+        return articleRepository.findAll().stream()
+                .map(article -> mapToDto(article))
+                .collect(Collectors.toList());
     }
 
     @Override
     public ArticleDto getById(int id) {
-        Article a = articleDao.getById(id);
-        return new ArticleDto(a.getTitle(), a.getContent(), a.getArticleId(), a.getSummary(),a.getAuthorId(), userDao.getById(a.getAuthorId()).getFirstName() + " " + userDao.getById(a.getAuthorId()).getLastName() + " (" + userDao.getById(a.getAuthorId()).getUsername() + ")", userDao.getById(a.getAuthorId()).getProfilePicture(), a.getPublishTime(), a.getCategory(), a.getImageUrl(), a.getViews(), a.getLikes());
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Article not found"));
+        return mapToDto(article);
     }
 
     @Override
     public void insert(Article article) {
-        articleDao.insert(article);
+        articleRepository.save(article);
     }
 
     @Override
     public void update(Article article) {
-        articleDao.update(article);
+        articleRepository.save(article);
     }
 
     @Override
     public void delete(Article article) {
-        articleDao.delete(article);
+        articleRepository.delete(article);
+    }
+
+    private ArticleDto mapToDto(Article article) {
+        return new ArticleDto(
+                article.getTitle(),
+                article.getContent(),
+                article.getArticleId(),
+                article.getSummary(),
+                article.getAuthor().getUserId(),
+                article.getAuthor().getFirstName() + " " + article.getAuthor().getLastName(),
+                article.getAuthor().getProfilePicture(),
+                article.getPublishTime(),
+                article.getCategory(),
+                article.getImageUrl(),
+                article.getViews(),
+                article.getLikes()
+        );
     }
 }

@@ -1,51 +1,32 @@
 package ru.kpfu.itis.asadullin.model.entity;
 
-public class Like {
-    private int likeId, userId, targetId;
-    boolean isArticle;
+import lombok.*;
 
-    public Like(int likeId, int userId, int targetId, boolean isArticle) {
-        this.likeId = likeId;
-        this.userId = userId;
-        this.targetId = targetId;
-        this.isArticle = isArticle;
-    }
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "likes")
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Like {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "like_id")
+    private int likeId;
+    @Column(name = "user_id")
+    private int userId;
+    @Column(name = "target_id")
+    private int targetId;
+    @Column(name = "is_article")
+    boolean isArticle;
 
     public Like(int userId, int targetId, boolean isArticle) {
         this.userId = userId;
         this.targetId = targetId;
         this.isArticle = isArticle;
-    }
-
-    public int getLikeId() {
-        return likeId;
-    }
-
-    public void setLikeId(int likeId) {
-        this.likeId = likeId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getTargetId() {
-        return targetId;
-    }
-
-    public void setTargetId(int targetId) {
-        this.targetId = targetId;
-    }
-
-    public boolean isArticle() {
-        return isArticle;
-    }
-
-    public void setArticle(boolean article) {
-        isArticle = article;
     }
 }
